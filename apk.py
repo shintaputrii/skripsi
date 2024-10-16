@@ -86,7 +86,7 @@ with st.container():
         st.subheader("""Deskripsi Data""")
         st.write(
             """
-        Data yang digunakan dalam aplikasi ini yaitu data ISPU DKI Jakarta periode 1 Januari 2015 sampai 31 Desember 2021. Data yang ditampilkan adalah data ispu yang diperoleh per harinya. 
+        Data yang digunakan dalam aplikasi ini yaitu data ISPU DKI Jakarta periode 1 Desember 2022 sampai 30 November 2023. Data yang ditampilkan adalah data ispu yang diperoleh per harinya. 
         """
         )
 
@@ -100,7 +100,7 @@ with st.container():
 
         st.subheader("""Dataset ISPU DKI Jakarta""")
         df = pd.read_csv(
-            "https://raw.githubusercontent.com/normalitariyn/dataset/main/data%20ispu%20dki%20jakarta.csv"
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
         )
         st.dataframe(df, width=600)
 
