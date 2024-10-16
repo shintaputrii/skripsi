@@ -98,11 +98,26 @@ with st.container():
             unsafe_allow_html=True,
         )
 
-        st.subheader("""Dataset ISPU DKI Jakarta""")
+        st.subheader("""Dataset""")
         df = pd.read_csv(
             "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
         )
         st.dataframe(df, width=600)
+
+
+        
+        st.subheader("""Penghapusan kolom""")
+        df = pd.read_csv(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
+        )
+        
+        # Menghapus kolom yang tidak diinginkan
+        kolom_yang_dihapus = ['periode', 'data', 'stasiun', 'max', 'parameter_kritis', 'kategori']
+        df = df.drop(columns=kolom_yang_dihapus)
+        
+        # Menampilkan dataframe
+        st.dataframe(df, width=600)
+
 
         # Function to plot each parameter
         def plot_parameter(data, parameter, color):
