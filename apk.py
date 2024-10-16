@@ -238,20 +238,29 @@ with st.container():
         st.subheader("Normalisasi Data")
         scaler = MinMaxScaler()
         
-        # Melakukan normalisasi untuk setiap kolom polutan
-        for col in ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']:
-            # Reshape data menjadi 2D array
-            values = data[col].values.reshape(-1, 1)
-            
-            # Fit dan transform data
-            normalized_values = scaler.fit_transform(values)
-            
-            # Masukkan hasil normalisasi ke dalam DataFrame
-            data[f'{col}_normalized'] = normalized_values
+        # Daftar kolom polutan
+        pollutants = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
         
-        # Tampilkan kolom asli dan hasil normalisasi
-        normalized_columns = [f'{col}_normalized' for col in ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']]
-        st.write(data[['pm_sepuluh'] + normalized_columns])
+        # Melakukan normalisasi untuk setiap kolom polutan
+        for col in pollutants:
+            with st.expander(f"{col.upper()} - Normalisasi Data"):
+                # Reshape data menjadi 2D array
+                values = data[col].values.reshape(-1, 1)
+                
+                # Fit dan transform data
+                normalized_values = scaler.fit_transform(values)
+                
+                # Masukkan hasil normalisasi ke dalam DataFrame
+                data[f'{col}_normalized'] = normalized_values
+                
+                # Tampilkan hasil normalisasi
+                st.write(data[[col, f'{col}_normalized']])
+        
+        # Tampilkan semua kolom polutan dan kolom normalisasi mereka
+        st.write(data[[f'{col}' for col in pollutants] + [f'{col}_normalized' for col in pollutants]])
+        
+        # Menampilkan data yang telah diproses
+        st.dataframe(data, width=600)
 
     elif selected == "Modeling":
         df = pd.read_csv(
