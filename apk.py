@@ -972,5 +972,6 @@ with st.container():
     elif selected == "About Me":
         st.write("NShinta Alya Imani Putri \n (200411100005) \n Teknik Informatika")
         
-    # Menampilkan nama di bawah halaman
-    st.write("####### Shinta Alya Imani Putri")
+    # Menampilkan penanda
+    st.markdown("---")  # Menambahkan garis pemisah
+    st.write("Shinta Alya Imani Putri")
