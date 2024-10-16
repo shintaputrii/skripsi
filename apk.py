@@ -77,7 +77,7 @@ with st.container():
         st.subheader("""Deskripsi Aplikasi""")
         st.write(
             """
-         Aplikasi Peramalan Indeks Standar Pencemaran Udara di DKI Jakarta merupakan aplikasi yang digunakan untuk meramalkan lima konsentrasi polutan udara di DKI Jakarta yang meliputi PM10, SO2, CO, NO2, dan O3 pada hari berikutnya.
+         Aplikasi Prediksi kualitas Udara di DKI Jakarta merupakan aplikasi yang digunakan untuk meramalkan lima konsentrasi polutan udara di DKI Jakarta yang meliputi PM10, SO2, CO, NO2, dan O3 pada hari berikutnya.
         """
         )
 
@@ -93,7 +93,7 @@ with st.container():
         st.subheader("""Sumber Dataset""")
         st.write(
             """
-        Sumber data didapatkan dari website "Open Data DKI Jakarta". Berikut merupakan link untuk mengakses sumber dataset.
+        Sumber data didapatkan dari website "Satu Data DKI Jakarta". Berikut merupakan link untuk mengakses sumber dataset.
         <a href="https://satudata.jakarta.go.id/search?q=data%20ispu&halaman=all&kategori=all&topik=all&organisasi=all&status=all&sort=desc&page_no=1&show_filter=true&lang=id">Klik disini</a>""",
             unsafe_allow_html=True,
         )
