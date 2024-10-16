@@ -32,7 +32,7 @@ with st.container():
     with st.sidebar:
         selected = option_menu(
             st.write(
-                """<h2 style = "text-align: center;"><img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fnews.detik.com%2Fberita%2Fd-6184561%2Fkualitas-udara-jakarta-hari-ini-terburuk-se-ri-versi-iqair&psig=AOvVaw0QJXZklBKL9IK98ihm3QAv&ust=1729164098523000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJDFwcnkkokDFQAAAAAdAAAAABAE" width="130" height="130"><br></h2>""",
+                """<h2 style = "text-align: center;"><img src="" width="130" height="130"><br></h2>""",
                 unsafe_allow_html=True,
             ),
             [
@@ -69,7 +69,7 @@ with st.container():
     if selected == "Home":
         st.write(
             """<h3 style = "text-align: center;">
-        <img src="https://images.forestdigest.com/upload/2023/20230820121017.jpg" width="500" height="300">
+        <img src="https://raw.githubusercontent.com/shintaputrii/skripsi/main/udara.jpeg" width="500" height="300">
         </h3>""",
             unsafe_allow_html=True,
         )
