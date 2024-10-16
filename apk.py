@@ -234,85 +234,27 @@ with st.container():
         st.pyplot()
 
         # Standardisasi DATA
-        st.subheader("""Normalisasi Data""")
-        scaler = StandardScaler()
-
-        with st.expander("PM10 - Normalisasi Data"):
-            scaledX_pm10 = scaler.fit_transform(dfX_pm10)
-            scaledY_pm10 = scaler.fit_transform(dfy_pm10)
-            features_namesX_pm10 = dfX_pm10.columns.copy()
-            features_namesy_pm10 = dfy_pm10.columns.copy()
-            # features_names.remove('label')
-            scaled_featuresX_pm10 = pd.DataFrame(
-                scaledX_pm10, columns=features_namesX_pm10
-            )
-            scaled_featuresY_pm10 = pd.DataFrame(
-                scaledY_pm10, columns=features_namesy_pm10
-            )
-            normalized_pm10 = pd.concat(
-                (scaled_featuresX_pm10, scaled_featuresY_pm10), axis=1
-            )
-            st.dataframe(normalized_pm10, width=600)
-
-        with st.expander("SO2 - Normalisasi Data"):
-            scaledX_so2 = scaler.fit_transform(dfX_so2)
-            scaledY_so2 = scaler.fit_transform(dfy_so2)
-            features_namesX_so2 = dfX_so2.columns.copy()
-            features_namesy_so2 = dfy_so2.columns.copy()
-            # features_names.remove('label')
-            scaled_featuresX_so2 = pd.DataFrame(
-                scaledX_so2, columns=features_namesX_so2
-            )
-            scaled_featuresY_so2 = pd.DataFrame(
-                scaledY_so2, columns=features_namesy_so2
-            )
-            normalized_so2 = pd.concat(
-                (scaled_featuresX_so2, scaled_featuresY_so2), axis=1
-            )
-            st.dataframe(normalized_so2, width=600)
-
-        with st.expander("CO - Normalisasi Data"):
-            scaledX_co = scaler.fit_transform(dfX_co)
-            scaledY_co = scaler.fit_transform(dfy_co)
-            features_namesX_co = dfX_co.columns.copy()
-            features_namesy_co = dfy_co.columns.copy()
-            # features_names.remove('label')
-            scaled_featuresX_co = pd.DataFrame(scaledX_co, columns=features_namesX_co)
-            scaled_featuresY_co = pd.DataFrame(scaledY_co, columns=features_namesy_co)
-            normalized_co = pd.concat(
-                (scaled_featuresX_co, scaled_featuresY_co), axis=1
-            )
-            st.dataframe(normalized_co, width=600)
-
-        with st.expander("NO2 - Normalisasi Data"):
-            scaledX_no2 = scaler.fit_transform(dfX_no2)
-            scaledY_no2 = scaler.fit_transform(dfy_no2)
-            features_namesX_no2 = dfX_no2.columns.copy()
-            features_namesy_no2 = dfy_no2.columns.copy()
-            # features_names.remove('label')
-            scaled_featuresX_no2 = pd.DataFrame(
-                scaledX_no2, columns=features_namesX_no2
-            )
-            scaled_featuresY_no2 = pd.DataFrame(
-                scaledY_no2, columns=features_namesy_no2
-            )
-            normalized_no2 = pd.concat(
-                (scaled_featuresX_no2, scaled_featuresY_no2), axis=1
-            )
-            st.dataframe(normalized_no2, width=600)
-
-        with st.expander("O3 - Normalisasi Data"):
-            scaledX_o3 = scaler.fit_transform(dfX_o3)
-            scaledY_o3 = scaler.fit_transform(dfy_o3)
-            features_namesX_o3 = dfX_o3.columns.copy()
-            features_namesy_o3 = dfy_o3.columns.copy()
-            # features_names.remove('label')
-            scaled_featuresX_o3 = pd.DataFrame(scaledX_o3, columns=features_namesX_o3)
-            scaled_featuresY_o3 = pd.DataFrame(scaledY_o3, columns=features_namesy_o3)
-            normalized_o3 = pd.concat(
-                (scaled_featuresX_o3, scaled_featuresY_o3), axis=1
-            )
-            st.dataframe(normalized_o3, width=600)
+        # Normalisasi Data
+        st.subheader("Normalisasi Data")
+        scaler = MinMaxScaler()
+        
+        # Melakukan normalisasi untuk setiap kolom polutan
+        for col in ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']:
+            # Reshape data menjadi 2D array
+            values = data[col].values.reshape(-1, 1)
+            
+            # Fit dan transform data
+            normalized_values = scaler.fit_transform(values)
+            
+            # Masukkan hasil normalisasi ke dalam DataFrame
+            data[f'{col}_normalized'] = normalized_values
+        
+        # Menampilkan data yang telah diproses
+        st.dataframe(data, width=600)
+        
+        # Tampilkan kolom asli dan hasil normalisasi
+        normalized_columns = [f'{col}_normalized' for col in ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']]
+        st.write(data[['pm_sepuluh'] + normalized_columns])
 
     elif selected == "Modeling":
         df = pd.read_csv(
