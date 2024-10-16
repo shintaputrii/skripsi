@@ -115,39 +115,49 @@ with st.container():
         # Menghapus kolom yang tidak diinginkan
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
 
-        # Mengganti nilai '-' dengan NaN
-        data.replace(r'-+', np.nan, regex=True, inplace=True)
-
         # Pastikan kolom tanggal sudah ada dan dalam format datetime
         data['tanggal'] = pd.to_datetime(data['tanggal'])
         
+        # Konversi kolom polutan ke tipe data integer
+        polutan_columns = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
+        data[polutan_columns] = data[polutan_columns].astype(float)  # Ubah menjadi float terlebih dahulu untuk menghindari error
+        data[polutan_columns] = data[polutan_columns].fillna(0).astype(int)  # Ganti NaN dengan 0, lalu ubah ke integer
+        
         # Resample data
         data_resample = data.set_index('tanggal').resample('D').mean().reset_index()
-
+        
+        # Menampilkan dataframe
+        st.title("Dataset Kualitas Udara DKI Jakarta")
         st.dataframe(data, width=600)
-
-        # Tampilkan plot masing-masing parameter
-        plt.figure(figsize=(12, 6))  # Menentukan ukuran figure
         
-        # Plot setiap polutan
-        plt.plot(data_resample['tanggal'], data_resample['pm_sepuluh'], color='red', label='PM10')
-        plt.plot(data_resample['tanggal'], data_resample['pm_duakomalima'], color='yellow', label='PM2.5')
-        plt.plot(data_resample['tanggal'], data_resample['karbon_monoksida'], color='green', label='Karbon Monoksida')
-        plt.plot(data_resample['tanggal'], data_resample['ozon'], color='magenta', label='Ozon')
-        plt.plot(data_resample['tanggal'], data_resample['nitrogen_dioksida'], color='black', label='Nitrogen Dioksida')
-        plt.plot(data_resample['tanggal'], data_resample['sulfur_dioksida'], color='blue', label='Sulfur Dioksida')
+        # Cek apakah kolom yang ingin dipetakan ada di DataFrame
+        missing_columns = [col for col in polutan_columns if col not in data_resample.columns]
         
-        # Menambahkan label sumbu x dan y
-        plt.xlabel('Tanggal')
-        plt.ylabel('Konsentrasi Polutan')
+        if missing_columns:
+            st.error(f"Kolom berikut tidak ditemukan: {missing_columns}")
+        else:
+            # Membuat plot
+            plt.figure(figsize=(12, 6))  # Menentukan ukuran figure
         
-        # Menambahkan judul dan legenda
-        plt.title('Konsentrasi Polutan Harian')
-        plt.legend()
-        plt.grid()
+            # Plot setiap polutan
+            plt.plot(data_resample['tanggal'], data_resample['pm_sepuluh'], color='red', label='PM10')
+            plt.plot(data_resample['tanggal'], data_resample['pm_duakomalima'], color='yellow', label='PM2.5')
+            plt.plot(data_resample['tanggal'], data_resample['karbon_monoksida'], color='green', label='Karbon Monoksida')
+            plt.plot(data_resample['tanggal'], data_resample['ozon'], color='magenta', label='Ozon')
+            plt.plot(data_resample['tanggal'], data_resample['nitrogen_dioksida'], color='black', label='Nitrogen Dioksida')
+            plt.plot(data_resample['tanggal'], data_resample['sulfur_dioksida'], color='blue', label='Sulfur Dioksida')
         
-        # Menampilkan plot di Streamlit
-        st.pyplot(plt)
+            # Menambahkan label sumbu x dan y
+            plt.xlabel('Tanggal')
+            plt.ylabel('Konsentrasi Polutan')
+        
+            # Menambahkan judul dan legenda
+            plt.title('Konsentrasi Polutan Harian')
+            plt.legend()
+            plt.grid()
+        
+            # Menampilkan plot di Streamlit
+            st.pyplot(plt)
 
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
