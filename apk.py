@@ -110,10 +110,6 @@ with st.container():
         # Membaca dataset
         data = pd.read_csv(
             "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
-        )
-        
-        # Menyimpan salinan data asli
-        data_asli = data.copy()
         
         # Menghapus kolom yang tidak diinginkan
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
@@ -121,33 +117,6 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
         
-        # Mengonversi kolom tanggal ke datetime
-        data_asli['tanggal'] = pd.to_datetime(data_asli['tanggal'], errors='coerce')
-        data_asli = data_asli.set_index('tanggal')
-        
-        # Menampilkan plot untuk data asli
-        plt.figure(figsize=(12, 6))  # Menentukan ukuran figure
-        
-        # Plot setiap polutan dari data asli
-        plt.plot(data_asli['tanggal'], data_asli['pm_sepuluh'], color='red', label='PM10')
-        plt.plot(data_asli['tanggal'], data_asli['pm_duakomalima'], color='yellow', label='PM2.5')
-        plt.plot(data_asli['tanggal'], data_asli['karbon_monoksida'], color='green', label='Karbon Monoksida')
-        plt.plot(data_asli['tanggal'], data_asli['ozon'], color='magenta', label='Ozon')
-        plt.plot(data_asli['tanggal'], data_asli['nitrogen_dioksida'], color='black', label='Nitrogen Dioksida')
-        plt.plot(data_asli['tanggal'], data_asli['sulfur_dioksida'], color='blue', label='Sulfur Dioksida')
-        
-        # Menambahkan label sumbu x dan y
-        plt.xlabel('Tanggal')
-        plt.ylabel('Konsentrasi Polutan')
-        
-        # Menambahkan judul dan legenda
-        plt.title('Konsentrasi Polutan Harian (Data Asli)')
-        plt.legend()
-        plt.grid()
-        
-        # Menampilkan plot di Streamlit
-        st.pyplot(plt)
-
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
         st.subheader("""Mean Imputation""")
