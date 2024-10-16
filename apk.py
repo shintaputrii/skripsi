@@ -258,9 +258,6 @@ with st.container():
         
         # Tampilkan semua kolom polutan dan kolom normalisasi mereka
         st.write(data[[f'{col}' for col in pollutants] + [f'{col}_normalized' for col in pollutants]])
-        
-        # Menampilkan data yang telah diproses
-        st.dataframe(data, width=600)
 
     elif selected == "Modeling":
         # Membaca dataset dari file Excel
