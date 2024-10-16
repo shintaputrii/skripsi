@@ -116,23 +116,32 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
 
-        # Menampilkan grafik
-        st.subheader("Grafik Data")
-        # Misalkan kita ingin memplot salah satu kolom, misalnya 'nilai_pencemar'
-        # Ganti 'nilai_pencemar' dengan kolom yang relevan dari dataset
-        if 'nilai_pencemar' in data.columns:
-            plt.figure(figsize=(10, 5))
-            plt.plot(data['tanggal'], data['nilai_pencemar'], marker='o')  # Ganti dengan kolom yang sesuai
-            plt.title('Grafik Nilai Pencemar dari Waktu ke Waktu')
+        # Menampilkan grafik untuk kolom yang diinginkan
+        st.subheader("Grafik Data PM")
+        # Memastikan kolom ada
+        pm_columns = ['pm_sepuluh', 'pm_duakomalima', 'pm_tigakoma', 'pm_empatkoma', 'pm_lainnya']
+        
+        # Memastikan semua kolom ada dalam DataFrame
+        available_columns = [col for col in pm_columns if col in data.columns]
+        
+        if available_columns:
+            plt.figure(figsize=(12, 6))
+            
+            # Plot setiap kolom
+            for col in available_columns:
+                plt.plot(data['tanggal'], data[col], marker='o', label=col)
+            
+            plt.title('Grafik PM dari Waktu ke Waktu')
             plt.xlabel('Tanggal')
-            plt.ylabel('Nilai Pencemar')
+            plt.ylabel('Konsentrasi PM')
             plt.xticks(rotation=45)
+            plt.legend()
             plt.tight_layout()
             
             # Menampilkan grafik di Streamlit
             st.pyplot(plt)
         else:
-            st.error("Kolom 'nilai_pencemar' tidak ditemukan dalam data.")
+            st.error("Tidak ada kolom PM yang ditemukan dalam data.")
     
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
