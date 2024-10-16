@@ -224,6 +224,8 @@ with st.container():
         
         # Menampilkan plot
         plt.show()
+        # Setelah plotting
+        st.pyplot()
 
         # Standardisasi DATA
         st.subheader("""Normalisasi Data""")
