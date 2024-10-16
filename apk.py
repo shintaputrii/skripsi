@@ -121,7 +121,7 @@ with st.container():
     elif selected == "Missing Value":
         # MEAN IMPUTATION
         st.subheader("""Mean Imputation""")
-         Membaca dataset dari file Excel
+        # Membaca dataset dari file Excel
         data = pd.read_excel(
             "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
         )
