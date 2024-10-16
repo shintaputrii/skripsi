@@ -973,4 +973,4 @@ with st.container():
         st.write("NShinta Alya Imani Putri \n (200411100005) \n Teknik Informatika")
         
     # Menampilkan nama di bawah halaman
-    st.write("### Shinta Alya Imani Putri")
+    st.write("####### Shinta Alya Imani Putri")
