@@ -115,7 +115,25 @@ with st.container():
         
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
-        
+
+        # Menampilkan grafik
+        st.subheader("Grafik Data")
+        # Misalkan kita ingin memplot salah satu kolom, misalnya 'nilai_pencemar'
+        # Ganti 'nilai_pencemar' dengan kolom yang relevan dari dataset
+        if 'nilai_pencemar' in data.columns:
+            plt.figure(figsize=(10, 5))
+            plt.plot(data['tanggal'], data['nilai_pencemar'], marker='o')  # Ganti dengan kolom yang sesuai
+            plt.title('Grafik Nilai Pencemar dari Waktu ke Waktu')
+            plt.xlabel('Tanggal')
+            plt.ylabel('Nilai Pencemar')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            
+            # Menampilkan grafik di Streamlit
+            st.pyplot(plt)
+        else:
+            st.error("Kolom 'nilai_pencemar' tidak ditemukan dalam data.")
+    
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
         st.subheader("""Mean Imputation""")
