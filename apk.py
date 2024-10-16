@@ -118,18 +118,13 @@ with st.container():
         # Mengganti nilai '-' dengan NaN
         data.replace(r'-+', np.nan, regex=True, inplace=True)
 
+        # Pastikan kolom tanggal sudah ada dan dalam format datetime
+        data['tanggal'] = pd.to_datetime(data['tanggal'])
+        
+        # Resample data
+        data_resample = data.set_index('tanggal').resample('D').mean().reset_index()
+
         st.dataframe(data, width=600)
-
-
-
-        # Function to plot each parameter
-        def plot_parameter(data, parameter, color):
-            fig, ax = plt.subplots()
-            data.plot(x="tanggal", y=parameter, kind="line", color=color, ax=ax)
-            ax.set_xlabel("Tanggal")
-            ax.set_ylabel(parameter.upper())
-            ax.set_title(f"{parameter.upper()} dari Waktu ke Waktu")
-            return fig
 
         # Tampilkan plot masing-masing parameter
         plt.figure(figsize=(12, 6))  # Menentukan ukuran figure
