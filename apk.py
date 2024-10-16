@@ -249,9 +249,6 @@ with st.container():
             # Masukkan hasil normalisasi ke dalam DataFrame
             data[f'{col}_normalized'] = normalized_values
         
-        # Menampilkan data yang telah diproses
-        st.dataframe(data, width=600)
-        
         # Tampilkan kolom asli dan hasil normalisasi
         normalized_columns = [f'{col}_normalized' for col in ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']]
         st.write(data[['pm_sepuluh'] + normalized_columns])
