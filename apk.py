@@ -25,7 +25,7 @@ st.set_page_config(
 )
 
 st.write(
-    """<h1 style="font-size: 20px;">Prediksi Kualitas Udara di DKI Jakarta</h1>""",
+    """<h1 style="font-size: 40px;">Prediksi Kualitas Udara di DKI Jakarta</h1>""",
     unsafe_allow_html=True,
 )
 
