@@ -107,16 +107,18 @@ with st.container():
 
         
         st.subheader("""Penghapusan kolom""")
-        df = pd.read_csv(
+        # Membaca dataset
+        data = pd.read_csv(
             "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
         )
         
         # Menghapus kolom yang tidak diinginkan
-        kolom_yang_dihapus = ['periode', 'data', 'stasiun', 'max', 'parameter_kritis', 'kategori']
-        df = df.drop(columns=kolom_yang_dihapus)
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
         
         # Menampilkan dataframe
-        st.dataframe(df, width=600)
+        st.title("Dataset Kualitas Udara DKI Jakarta")
+        st.dataframe(data, width=600)
+
 
 
         # Function to plot each parameter
