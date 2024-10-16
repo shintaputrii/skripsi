@@ -283,17 +283,6 @@ with st.container():
         # Konversi kolom PM10 ke tipe data integer
         data['pm_sepuluh'] = data['pm_sepuluh'].astype(int)
         
-        # Normalisasi Data PM10
-        st.subheader("Normalisasi Data PM10")
-        scaler = MinMaxScaler()
-        
-        # Melakukan normalisasi untuk PM10
-        with st.expander("PM10 - Normalisasi Data"):
-            values = data['pm_sepuluh'].values.reshape(-1, 1)
-            normalized_values = scaler.fit_transform(values)
-            data['pm_sepuluh_normalized'] = normalized_values
-            st.write(data[['pm_sepuluh', 'pm_sepuluh_normalized']])
-        
         # Bagian MODELLING
         st.subheader("Modelling PM10")
         
