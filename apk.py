@@ -113,6 +113,7 @@ with st.container():
         
         # Menghapus kolom yang tidak diinginkan
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+        data.tanggal = pd.to_datetime(data.tanggal)
         
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
