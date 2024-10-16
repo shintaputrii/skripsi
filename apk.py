@@ -974,4 +974,4 @@ with st.container():
         
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
-    st.write("Shinta Alya Imani Putri")
+    st.write("Shinta Alya Imani Putri-200411100005 (Teknik Informatika)")
