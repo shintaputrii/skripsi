@@ -116,35 +116,6 @@ with st.container():
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
 
         st.dataframe(data, width=600)
-        
-        # Cek apakah kolom yang ingin dipetakan ada di DataFrame
-        missing_columns = [col for col in polutan_columns if col not in data_resample.columns]
-        
-        if missing_columns:
-            st.error(f"Kolom berikut tidak ditemukan: {missing_columns}")
-        else:
-            # Membuat plot
-            plt.figure(figsize=(12, 6))  # Menentukan ukuran figure
-        
-            # Plot setiap polutan
-            plt.plot(data_resample['tanggal'], data_resample['pm_sepuluh'], color='red', label='PM10')
-            plt.plot(data_resample['tanggal'], data_resample['pm_duakomalima'], color='yellow', label='PM2.5')
-            plt.plot(data_resample['tanggal'], data_resample['karbon_monoksida'], color='green', label='Karbon Monoksida')
-            plt.plot(data_resample['tanggal'], data_resample['ozon'], color='magenta', label='Ozon')
-            plt.plot(data_resample['tanggal'], data_resample['nitrogen_dioksida'], color='black', label='Nitrogen Dioksida')
-            plt.plot(data_resample['tanggal'], data_resample['sulfur_dioksida'], color='blue', label='Sulfur Dioksida')
-        
-            # Menambahkan label sumbu x dan y
-            plt.xlabel('Tanggal')
-            plt.ylabel('Konsentrasi Polutan')
-        
-            # Menambahkan judul dan legenda
-            plt.title('Konsentrasi Polutan Harian')
-            plt.legend()
-            plt.grid()
-        
-            # Menampilkan plot di Streamlit
-            st.pyplot(plt)
 
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
