@@ -131,6 +131,11 @@ with st.container():
         
         # Mengganti nilai '-' dengan NaN
         data.replace(r'-+', np.nan, regex=True, inplace=True)
+
+        # Menampilkan jumlah missing value per kolom
+        missing_values = data.isnull().sum()
+        st.write("Jumlah Missing Value per Kolom:")
+        st.dataframe(missing_values[missing_values > 0].reset_index(name='missing_values')
         
         # Mengidentifikasi kolom numerik
         numeric_cols = data.select_dtypes(include=np.number).columns
@@ -143,7 +148,7 @@ with st.container():
 
         st.dataframe(data, width=600)
 
-        # MEAN IMPUTATION
+        # PLOTING DATA
         st.subheader("""Ploting Data""")
         # Membaca dataset dari file Excel
         data = pd.read_excel(
