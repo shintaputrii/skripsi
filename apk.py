@@ -263,187 +263,110 @@ with st.container():
         st.dataframe(data, width=600)
 
     elif selected == "Modeling":
-        df = pd.read_csv(
-            "https://raw.githubusercontent.com/normalitariyn/dataset/main/data%20ispu%20dki%20jakarta.csv"
+        # Membaca dataset dari file Excel
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
         )
-
-        # mean imputation
-        data = df.select_dtypes(include=[np.number]).columns
-        imputer = SimpleImputer(strategy="mean")
-        imputed_data = imputer.fit_transform(df[data])
-        imputed_df_numeric = pd.DataFrame(imputed_data, columns=data, index=df.index)
-        imputed_df = pd.concat([imputed_df_numeric, df.drop(columns=data)], axis=1)
-        imports_pm10 = imputed_df["pm10"].values
-        imports_so2 = imports = imputed_df["so2"].values
-        imports_co = imports = imputed_df["co"].values
-        imports_no2 = imports = imputed_df["no2"].values
-        imports_o3 = imports = imputed_df["o3"].values
-
-        # univariate transform
-        def split_sequence(sequence, n_steps):
-            X, y = list(), list()
-            for i in range(len(sequence)):
-                # find the end of this pattern
-                end_ix = i + n_steps
-                # check if we are beyond the sequence
-                if end_ix > len(sequence) - 1:
-                    break
-                # gather input and output parts of the pattern
-                seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
-                X.append(seq_x)
-                y.append(seq_y)
-            return array(X), array(y)
-
-        # define univariate time series
-        series = array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-        # transform to a supervised learning problem
-        kolom = 4
-
-        # standard scaler
-        scaler = StandardScaler()
-
-        # create Tabs
-        tab_titles = ["PM10", "SO2", "‍CO", "NO2", "O3"]
-        tabs = st.tabs(tab_titles)
-
-        # PM10
-        with tabs[0]:
-            st.markdown(
-                "<h1 style='text-align: center; '>Modelling PM10</h2>",
-                unsafe_allow_html=True,
-            )
-            selected_pm10 = st.selectbox(
-                "Pilih Modelling", ["Select Modelling PM10", "SVR PM10", "SVR-PSO PM10"]
-            )
-
-            # univariate pm10
-            X_pm10, y_pm10 = split_sequence(imports_pm10, kolom)
-            print(X_pm10.shape, y_pm10.shape)
-            shapeX_pm10 = X_pm10.shape
-            dfX_pm10 = pd.DataFrame(X_pm10)
-            dfy_pm10 = pd.DataFrame(y_pm10, columns=["Xt"])
-            df_pm10 = pd.concat((dfX_pm10, dfy_pm10), axis=1)
-
-            # standardisasi pm10
-            scaledX_pm10 = scaler.fit_transform(dfX_pm10)
-            scaledY_pm10 = scaler.fit_transform(dfy_pm10)
-            features_namesX_pm10 = dfX_pm10.columns.copy()
-            features_namesy_pm10 = dfy_pm10.columns.copy()
-            scaled_featuresX_pm10 = pd.DataFrame(
-                scaledX_pm10, columns=features_namesX_pm10
-            )
-            scaled_featuresY_pm10 = pd.DataFrame(
-                scaledY_pm10, columns=features_namesy_pm10
-            )
-
-            if selected_pm10 == "SVR PM10":
-
-                # Input kernel dan test size PM10
-                col1, col2 = st.columns(2)
-                with col1:
-                    test_size = st.selectbox(
-                        "Tes Size",
-                        ["Select", "0.1", "0.2", "0.3", "0.4", "0.5"],
-                        key="test_size_pm10",
-                    )
-
-                with col2:
-                    kernel = st.selectbox(
-                        "Kernel",
-                        ["Select", "rbf", "linear", "poly"],
-                        key="kernel_pm10",
-                    )
-
-                # Pastikan nilai test_size dan kernel valid
-                if test_size != "Select" and kernel != "Select":
-
-                    # pembagian dataset PM10
-                    test_size = float(test_size)  # Konversi test_size ke float
-                    training, test = train_test_split(
-                        scaled_featuresX_pm10,
-                        test_size=test_size,
-                        random_state=0,
-                        shuffle=False,
-                    )
-                    training_label, test_label = train_test_split(
-                        scaled_featuresY_pm10,
-                        test_size=test_size,
-                        random_state=0,
-                        shuffle=False,
-                    )
-
-                    # Mengubah training_label pm10 ke bentuk array
-                    training_label = np.array(training_label).reshape(-1, 1)
-
-                    # Membuat model SVR
-                    regresor = SVR(kernel=kernel, C=1, gamma="scale", epsilon=0.1)
-                    regresor.fit(training, training_label.ravel())
-
-                    # Prediksi data testing
-                    pred_test = regresor.predict(test)
-                    pred_test = pred_test.reshape(-1, 1)
-
-                    # Denormalisasi data testing
-                    denormalized_train_pm10 = pd.DataFrame(
-                        scaler.inverse_transform(test_label),
-                        columns=["Data Aktual PM10 (Testing)"],
-                    )
-                    denormalized_pred_pm10 = pd.DataFrame(
-                        scaler.inverse_transform(pred_test),
-                        columns=["Data Prediksi PM10 (Testing)"],
-                    )
-                    hasil_pm10 = pd.concat(
-                        [denormalized_train_pm10, denormalized_pred_pm10], axis=1
-                    )
-
-                    # Hitung MAPE
-                    MAPE = mean_absolute_percentage_error(
-                        denormalized_train_pm10, denormalized_pred_pm10
-                    )
-
-                    # Menampilkan hasil prediksi dan data aktual test data
-                    st.subheader("Prediksi Data Testing")
-                    st.write(hasil_pm10)
-
-                    # # Menampilkan plot antara data aktual dan data prediksi pada data test
-                    # st.subheader("Plotting Data Aktual VS Data Prediksi - Data Testing")
-                    # st.line_chart(hasil_pm10)
-
-                    # plotting data
-                    st.subheader("Plotting Data Aktual VS Data Prediksi - Data Testing")
-                    fig = go.Figure()
-                    # Menambahkan data aktual dengan warna biru tua
-                    fig.add_trace(
-                        go.Scatter(
-                            x=hasil_pm10.index,
-                            y=hasil_pm10["Data Aktual PM10 (Testing)"],
-                            mode="lines",
-                            name="Data Aktual",
-                            line=dict(color="darkblue"),
-                        )
-                    )
-                    # Menambahkan data prediksi dengan warna merah
-                    fig.add_trace(
-                        go.Scatter(
-                            x=hasil_pm10.index,
-                            y=hasil_pm10["Data Prediksi PM10 (Testing)"],
-                            mode="lines",
-                            name="Data Prediksi",
-                            line=dict(color="red"),
-                        )
-                    )
-                    # Mengatur layout figure untuk memperbesar ukuran grafik
-                    fig.update_layout(
-                        width=800, height=600  # Lebar figure  # Tinggi figure
-                    )
-                    st.plotly_chart(fig, use_container_width=False)
-
-                    # Menampilkan matriks evaluasi
-                    st.subheader("Metriks Evaluasi Data Testing")
-                    st.info(f"MAPE :\n{MAPE*100}%")
-
-                else:
-                    st.warning("Please select both a test size and a kernel.")
+        
+        # Menghapus kolom yang tidak diinginkan
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+        
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+        
+        # Mengidentifikasi kolom numerik
+        numeric_cols = data.select_dtypes(include=np.number).columns
+        
+        # Imputasi mean untuk kolom numerik
+        data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+        
+        # Konversi kolom PM10 ke tipe data integer
+        data['pm_sepuluh'] = data['pm_sepuluh'].astype(int)
+        
+        # Normalisasi Data PM10
+        st.subheader("Normalisasi Data PM10")
+        scaler = MinMaxScaler()
+        
+        # Melakukan normalisasi untuk PM10
+        with st.expander("PM10 - Normalisasi Data"):
+            values = data['pm_sepuluh'].values.reshape(-1, 1)
+            normalized_values = scaler.fit_transform(values)
+            data['pm_sepuluh_normalized'] = normalized_values
+            st.write(data[['pm_sepuluh', 'pm_sepuluh_normalized']])
+        
+        # Tampilkan kolom PM10 dan kolom normalisasi
+        st.write(data[['pm_sepuluh', 'pm_sepuluh_normalized']])
+        
+        # Bagian MODELLING
+        st.subheader("Modelling PM10")
+        
+        # Fungsi untuk normalisasi data
+        def normalize_data(data):
+            scaler = MinMaxScaler()
+            normalized_data = scaler.fit_transform(data)
+            return normalized_data, scaler
+        
+        # Fungsi untuk menghitung keanggotaan fuzzy (inverse distance)
+        def calculate_membership_inverse(distances, epsilon=1e-10):
+            memberships = 1 / (distances + epsilon)
+            return memberships
+        
+        # Fungsi Fuzzy KNN untuk PM10
+        def fuzzy_knn_predict(data, k=3, test_size=0.3):
+            # Normalisasi data PM10
+            imports = data['pm_sepuluh'].values.reshape(-1, 1)
+            data['pm_sepuluh_normalized'], scaler = normalize_data(imports)
+        
+            # Ekstrak fitur dan target
+            X = data['pm_sepuluh_normalized'].values[:-1].reshape(-1, 1)
+            y = data['pm_sepuluh_normalized'].values[1:]
+        
+            # Bagi data menjadi train dan test sesuai rasio yang diberikan
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, shuffle=False)
+        
+            # Menyimpan tanggal untuk test set
+            dates_test = data['tanggal'].values[-len(y_test):]
+        
+            # Inisialisasi model KNN
+            knn = KNeighborsRegressor(n_neighbors=k, weights='distance')
+            knn.fit(X_train, y_train)
+        
+            # Mendapatkan tetangga dan jaraknya
+            distances, indices = knn.kneighbors(X_test, n_neighbors=k, return_distance=True)
+        
+            # Inisialisasi array untuk menyimpan prediksi
+            y_pred = np.zeros(len(X_test))
+        
+            # Loop untuk menghitung prediksi berdasarkan membership
+            for i in range(len(X_test)):
+                neighbor_distances = distances[i]
+                neighbor_indices = indices[i]
+                neighbor_targets = y_train[neighbor_indices]
+                memberships = calculate_membership_inverse(neighbor_distances)
+                y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
+        
+            # Mengembalikan nilai prediksi dan nilai aktual ke skala awal
+            y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))
+            y_test_original = scaler.inverse_transform(y_test.reshape(-1, 1))
+        
+            # Menghitung MAPE
+            mape = np.mean(np.abs((y_test_original - y_pred_original) / y_test_original)) * 100
+            
+            # Menampilkan hasil prediksi dan nilai aktual
+            results = pd.DataFrame({'Tanggal': dates_test, 'Actual': y_test_original.flatten(), 'Predicted': y_pred_original.flatten()})
+            st.write(f'MAPE untuk test size {int((1-test_size)*100)}%: {mape:.2f}%')
+            st.write("Hasil Prediksi:")
+            st.write(results)
+        
+            return mape
+        
+        # Menyimpan MAPE untuk setiap rasio
+        mapes = []
+        test_sizes = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
+        
+        for test_size in test_sizes:
+            mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
+            mapes.append(mape)
 
             elif selected_pm10 == "SVR-PSO PM10":
                 # Input kernel dan test size PM10
