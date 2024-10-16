@@ -99,15 +99,16 @@ with st.container():
         )
 
         st.subheader("""Dataset""")
-        df = pd.read_csv(
-            "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
+        # Menggunakan file Excel dari GitHub
+        df = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
         )
         st.dataframe(df, width=600)
         
         st.subheader("Penghapusan kolom")
-        # Membaca dataset
-        data = pd.read_csv(
-            "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
+        # Membaca dataset dari file Excel
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
         )
         
         # Menghapus kolom yang tidak diinginkan
@@ -115,9 +116,9 @@ with st.container():
         
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
-
-        # Mengubah kolom 'tanggal' menjadi tipe datetime
-        data['tanggal'] = pd.to_datetime(data['tanggal'], format='%d/%m/%Y', errors='coerce')
+        
+        # Mengubah kolom 'tanggal' menjadi tipe datetime dengan penanganan error
+        data['tanggal'] = pd.to_datetime(data['tanggal'], errors='coerce')
         
         # Periksa nilai NaT (tidak valid)
         invalid_dates = data[data['tanggal'].isna()]
@@ -162,7 +163,7 @@ with st.container():
                 # Menampilkan grafik di Streamlit
                 st.pyplot(plt)
             else:
-                st.error(f"Kolom '{col}' tidak ditemukan dalam data.")
+        st.error(f"Kolom '{col}' tidak ditemukan dalam data.")
     
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
