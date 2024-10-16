@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from numpy import array
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxdScaler
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_absolute_percentage_error
