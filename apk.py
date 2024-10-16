@@ -142,6 +142,31 @@ with st.container():
         data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
 
         st.dataframe(data, width=600)
+
+        # MEAN IMPUTATION
+        st.subheader("""Ploting Data""")
+        # Membaca dataset dari file Excel
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
+        )
+        
+        # Menghapus kolom yang tidak diinginkan
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+        
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+        
+        # Mengidentifikasi kolom numerik
+        numeric_cols = data.select_dtypes(include=np.number).columns
+        
+        # Imputasi mean untuk kolom numerik
+        data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+        
+        # Konversi kolom yang disebutkan ke tipe data integer
+        data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+        
+        # Resample data harian dan menghitung rata-rata
+        data_resample = data.set_index('tanggal').resample('D').mean().reset_index()
         
         # Menentukan ukuran figure untuk subplot
         plt.figure(figsize=(12, 18))  # Ukuran figure untuk 6 subplot
