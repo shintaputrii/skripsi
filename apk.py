@@ -119,11 +119,18 @@ with st.container():
         # Mengubah kolom 'tanggal' menjadi tipe datetime
         data['tanggal'] = pd.to_datetime(data['tanggal'], format='%d/%m/%Y', errors='coerce')
         
+        # Periksa nilai NaT (tidak valid)
+        invalid_dates = data[data['tanggal'].isna()]
+        if not invalid_dates.empty:
+            st.write("Nilai tidak valid dalam kolom tanggal:")
+            st.dataframe(invalid_dates)
+        
         # Menentukan bulan sebagai index
         data.set_index('tanggal', inplace=True)
         
-        # Mengambil angka puluhan untuk konsentrasi
-        data = data // 10 * 10  # Membulatkan ke puluhan terdekat
+        # Membulatkan kolom numerik ke puluhan terdekat
+        numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
+        data[numeric_columns] = data[numeric_columns] // 10 * 10  # Membulatkan ke puluhan terdekat
         
         # Daftar kolom yang ingin ditampilkan
         pollutant_columns = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
