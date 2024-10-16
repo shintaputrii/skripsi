@@ -23,6 +23,7 @@ st.set_page_config(
         "About": "# This is a header. This is an *extremely* cool app!",
     },
 )
+
 st.write(
     """<h1> Prediksi Kualitas Udara di DKI Jakarta</h1>""",
     unsafe_allow_html=True,
