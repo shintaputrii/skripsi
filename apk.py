@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 st.set_page_config(
     page_title="Prediksi Kualitas Udara DKI Jakarta",
-    page_icon="https://www.google.com/url?sa=i&url=https%3A%2F%2Fnews.detik.com%2Fberita%2Fd-6184561%2Fkualitas-udara-jakarta-hari-ini-terburuk-se-ri-versi-iqair&psig=AOvVaw0QJXZklBKL9IK98ihm3QAv&ust=1729164098523000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJDFwcnkkokDFQAAAAAdAAAAABAE",
+    page_icon="https://raw.githubusercontent.com/shintaputrii/skripsi/main/house_1152964.png",
     layout="centered",
     initial_sidebar_state="expanded",
     menu_items={
@@ -32,7 +32,7 @@ with st.container():
     with st.sidebar:
         selected = option_menu(
             st.write(
-                """<h2 style = "text-align: center;"><img src="" width="130" height="130"><br></h2>""",
+                """<h2 style = "text-align: center;"><img src="https://raw.githubusercontent.com/shintaputrii/skripsi/main/house_1152964.png" width="130" height="130"><br></h2>""",
                 unsafe_allow_html=True,
             ),
             [
