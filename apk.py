@@ -970,4 +970,7 @@ with st.container():
                             st.write(f"Hari ke-{i}: {prediction:.1f}")
 
     elif selected == "About Me":
-        st.write("Normalita Eka Ariyanti \n (200411100084) \n Teknik Informatika")
+        st.write("NShinta Alya Imani Putri \n (200411100005) \n Teknik Informatika")
+        
+    # Menampilkan nama di bawah halaman
+    st.write("### Shinta Alya Imani Putri")
