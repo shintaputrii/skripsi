@@ -55,7 +55,7 @@ with st.container():
             menu_icon="cast",
             default_index=0,
             styles={
-                "container": {"padding": "0!important", "background-color": "#005980"},
+                "container": {"padding": "0!important", "background-color": "#87CEEB"},
                 "icon": {"color": "white", "font-size": "18px"},
                 "nav-link": {
                     "font-size": "16px",
