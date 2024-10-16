@@ -38,7 +38,7 @@ with st.container():
             [
                 "Home",
                 "Data",
-                "Preprocessing",
+                "Missing Value",
                 "Modeling",
                 "Next Day",
 
@@ -118,18 +118,30 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
         
-    elif selected == "Preprocessing":
+    elif selected == "Missing Value":
         # MEAN IMPUTATION
         st.subheader("""Mean Imputation""")
-        df = pd.read_csv(
-            "https://raw.githubusercontent.com/normalitariyn/dataset/main/data%20ispu%20dki%20jakarta.csv"
+         Membaca dataset dari file Excel
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
         )
-        data = df.select_dtypes(include=[np.number]).columns
-        imputer = SimpleImputer(strategy="mean")
-        imputed_data = imputer.fit_transform(df[data])
-        imputed_df_numeric = pd.DataFrame(imputed_data, columns=data, index=df.index)
-        imputed_df = pd.concat([imputed_df_numeric, df.drop(columns=data)], axis=1)
-        st.dataframe(imputed_df, width=600)
+        
+        # Menghapus kolom yang tidak diinginkan
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+        
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+        
+        # Mengidentifikasi kolom numerik
+        numeric_cols = data.select_dtypes(include=np.number).columns
+        
+        # Imputasi mean untuk kolom numerik
+        data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+        
+        # Konversi kolom yang disebutkan ke tipe data integer
+        data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+
+        st.dataframe(data, width=600)
 
         # UNIVARIATE TRANSFORM
         st.subheader("""Univariate Transform""")
