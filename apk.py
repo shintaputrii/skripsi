@@ -6,14 +6,14 @@ from numpy import array
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.svm import SVR
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_absolute_percentage_error
 from math import sqrt
 import matplotlib.pyplot as plt
 
 
 st.set_page_config(
-    page_title="Prediksi ISPU DKI Jakarta",
+    page_title="Prediksi Kualitas Udara DKI Jakarta",
     page_icon="https://icon-library.com/images/data-science-icon/data-science-icon-25.jpg",
     layout="centered",
     initial_sidebar_state="expanded",
@@ -24,7 +24,7 @@ st.set_page_config(
     },
 )
 st.write(
-    """<h1>Aplikasi Peramalan Kadar Polutan Udara pada Indeks Standar Pencemaran Udara di DKI Jakarta</h1>""",
+    """<h1>Aplikasi Prediksi Kualitas Udara di DKI Jakarta</h1>""",
     unsafe_allow_html=True,
 )
 
@@ -40,9 +40,8 @@ with st.container():
                 "Data",
                 "Preprocessing",
                 "Modeling",
-                "Best Parameters",
-                "Implementation",
-                "About Me",
+                "Next Day",
+
             ],
             icons=[
                 "house",
