@@ -114,9 +114,10 @@ with st.container():
         
         # Menghapus kolom yang tidak diinginkan
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
-        
-        # Menampilkan dataframe
-        st.title("Dataset Kualitas Udara DKI Jakarta")
+
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+
         st.dataframe(data, width=600)
 
 
@@ -131,28 +132,27 @@ with st.container():
             return fig
 
         # Tampilkan plot masing-masing parameter
-        st.subheader("Plot PM10")
-        st.pyplot(plot_parameter(df_resample, "pm_sepuluh", "red"))
-
-        st.markdown("---")
-        st.subheader("Plot PM25")
-        st.pyplot(plot_parameter(df_resample, "pm_duakomalima", "green"))
-
-        st.markdown("---")
-        st.subheader("Plot SO2")
-        st.pyplot(plot_parameter(df_resample, "sulfur_dioksida", "green"))
-
-        st.markdown("---")
-        st.subheader("Plot CO")
-        st.pyplot(plot_parameter(df_resample, "karbon_monoksida", "magenta"))
-
-        st.markdown("---")
-        st.subheader("Plot O3")
-        st.pyplot(plot_parameter(df_resample, "ozon", "black"))
-
-        st.markdown("---")
-        st.subheader("Plot NO2")
-        st.pyplot(plot_parameter(df_resample, "nitrogen_dioksida", "blue"))
+        plt.figure(figsize=(12, 6))  # Menentukan ukuran figure
+        
+        # Plot setiap polutan
+        plt.plot(data_resample['tanggal'], data_resample['pm_sepuluh'], color='red', label='PM10')
+        plt.plot(data_resample['tanggal'], data_resample['pm_duakomalima'], color='yellow', label='PM2.5')
+        plt.plot(data_resample['tanggal'], data_resample['karbon_monoksida'], color='green', label='Karbon Monoksida')
+        plt.plot(data_resample['tanggal'], data_resample['ozon'], color='magenta', label='Ozon')
+        plt.plot(data_resample['tanggal'], data_resample['nitrogen_dioksida'], color='black', label='Nitrogen Dioksida')
+        plt.plot(data_resample['tanggal'], data_resample['sulfur_dioksida'], color='blue', label='Sulfur Dioksida')
+        
+        # Menambahkan label sumbu x dan y
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi Polutan')
+        
+        # Menambahkan judul dan legenda
+        plt.title('Konsentrasi Polutan Harian')
+        plt.legend()
+        plt.grid()
+        
+        # Menampilkan plot di Streamlit
+        st.pyplot(plt)
 
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
