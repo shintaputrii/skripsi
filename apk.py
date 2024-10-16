@@ -104,17 +104,6 @@ with st.container():
         )
         st.dataframe(df, width=600)
 
-        st.subheader("""Statistik Missing Value""")
-        df["tanggal"] = pd.to_datetime(df["tanggal"])
-        df_clean = df.dropna(subset=["tanggal"])
-        missing_value = df_clean.drop(columns=["tanggal"]).isnull().sum()
-        missing_value = pd.DataFrame(missing_value, columns=["Jumlah Missing Value"])
-        st.dataframe(missing_value, width=600)
-
-        st.markdown("---")
-        st.subheader("""Plotting Dataset""")
-        df_resample = df_clean.set_index("tanggal").resample("D").mean().reset_index()
-
         # Function to plot each parameter
         def plot_parameter(data, parameter, color):
             fig, ax = plt.subplots()
@@ -126,23 +115,27 @@ with st.container():
 
         # Tampilkan plot masing-masing parameter
         st.subheader("Plot PM10")
-        st.pyplot(plot_parameter(df_resample, "pm10", "red"))
+        st.pyplot(plot_parameter(df_resample, "pm_sepuluh", "red"))
+
+        st.markdown("---")
+        st.subheader("Plot PM25")
+        st.pyplot(plot_parameter(df_resample, "pm_duakomalima", "green"))
 
         st.markdown("---")
         st.subheader("Plot SO2")
-        st.pyplot(plot_parameter(df_resample, "so2", "green"))
+        st.pyplot(plot_parameter(df_resample, "sulfur_dioksida", "green"))
 
         st.markdown("---")
         st.subheader("Plot CO")
-        st.pyplot(plot_parameter(df_resample, "co", "magenta"))
+        st.pyplot(plot_parameter(df_resample, "karbon_monoksida", "magenta"))
 
         st.markdown("---")
         st.subheader("Plot O3")
-        st.pyplot(plot_parameter(df_resample, "o3", "black"))
+        st.pyplot(plot_parameter(df_resample, "ozon", "black"))
 
         st.markdown("---")
         st.subheader("Plot NO2")
-        st.pyplot(plot_parameter(df_resample, "no2", "blue"))
+        st.pyplot(plot_parameter(df_resample, "nitrogen_dioksida", "blue"))
 
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
