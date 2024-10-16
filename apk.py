@@ -78,7 +78,7 @@ with st.container():
         st.subheader("""Deskripsi Aplikasi""")
         st.write(
             """
-         Aplikasi Prediksi kualitas Udara di DKI Jakarta merupakan aplikasi yang digunakan untuk meramalkan lima konsentrasi polutan udara di DKI Jakarta yang meliputi PM10, SO2, CO, NO2, dan O3 pada hari berikutnya.
+         Aplikasi Prediksi kualitas Udara di DKI Jakarta merupakan aplikasi yang digunakan untuk meramalkan 6 konsentrasi polutan udara di DKI Jakarta yang meliputi PM10, PM25, SO2, CO, NO2, dan O3 dan menentukan kategori untuk hari berikutnya..
         """
         )
 
