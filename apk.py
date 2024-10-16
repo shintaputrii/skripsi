@@ -103,7 +103,7 @@ with st.container():
             "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
         )
         st.dataframe(df, width=600)
-        )
+
 
         st.subheader("""Penghapusan kolom""")
         # Membaca dataset
