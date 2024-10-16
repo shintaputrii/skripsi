@@ -117,7 +117,7 @@ with st.container():
         st.dataframe(data, width=600)
 
         # Mengubah kolom 'tanggal' menjadi tipe datetime
-        data['tanggal'] = pd.to_datetime(data['tanggal'])
+        data['tanggal'] = pd.to_datetime(data['tanggal'], format='%d/%m/%Y', errors='coerce')
         
         # Menentukan bulan sebagai index
         data.set_index('tanggal', inplace=True)
