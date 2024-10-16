@@ -103,16 +103,16 @@ with st.container():
             "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
         )
         st.dataframe(df, width=600)
-
-
-        st.subheader("""Penghapusan kolom""")
+        
+        st.subheader("Penghapusan kolom")
         # Membaca dataset
         data = pd.read_csv(
-              "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/refs/heads/main/kualitasudara.csv"
+        )
         
         # Menghapus kolom yang tidak diinginkan
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
-        )
+        
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
         
