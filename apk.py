@@ -116,6 +116,15 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
 
+        # Mengubah kolom 'tanggal' menjadi tipe datetime
+        data['tanggal'] = pd.to_datetime(data['tanggal'])
+        
+        # Menentukan bulan sebagai index
+        data.set_index('tanggal', inplace=True)
+        
+        # Mengambil angka puluhan untuk konsentrasi
+        data = data // 10 * 10  # Membulatkan ke puluhan terdekat
+        
         # Daftar kolom yang ingin ditampilkan
         pollutant_columns = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
         
@@ -125,11 +134,21 @@ with st.container():
                 st.subheader(f"Grafik {col}")
                 
                 plt.figure(figsize=(12, 6))
-                plt.plot(data['tanggal'], data[col], marker='o', label=col)
-                plt.title(f'Grafik {col} dari Waktu ke Waktu')
-                plt.xlabel('Tanggal')
-                plt.ylabel(f'Konsentrasi {col}')
+                
+                # Resampling data untuk per bulan
+                monthly_data = data[col].resample('M').mean()
+                
+                plt.plot(monthly_data.index, monthly_data, marker='o', label=col)
+                plt.title(f'Grafik {col} per Bulan')
+                plt.xlabel('Bulan')
+                plt.ylabel(f'Konsentrasi {col} (dalam puluhan)')
+                
+                # Mengatur format tanggal pada sumbu x
                 plt.xticks(rotation=45)
+                
+                # Mengatur label sumbu y untuk angka yang terlihat
+                plt.yticks(range(0, 101, 10))  # Sesuaikan rentang jika perlu
+                
                 plt.legend()
                 plt.tight_layout()
                 
