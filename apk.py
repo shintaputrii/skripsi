@@ -116,32 +116,27 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
 
-        # Menampilkan grafik untuk kolom yang diinginkan
-        st.subheader("Grafik Data PM")
-        # Memastikan kolom ada
-        pm_columns = ['pm_sepuluh', 'pm_duakomalima', 'pm_tigakoma', 'pm_empatkoma', 'pm_lainnya']
+        # Daftar kolom yang ingin ditampilkan
+        pollutant_columns = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
         
-        # Memastikan semua kolom ada dalam DataFrame
-        available_columns = [col for col in pm_columns if col in data.columns]
-        
-        if available_columns:
-            plt.figure(figsize=(12, 6))
-            
-            # Plot setiap kolom
-            for col in available_columns:
+        # Menampilkan grafik untuk setiap kolom satu per satu
+        for col in pollutant_columns:
+            if col in data.columns:
+                st.subheader(f"Grafik {col}")
+                
+                plt.figure(figsize=(12, 6))
                 plt.plot(data['tanggal'], data[col], marker='o', label=col)
-            
-            plt.title('Grafik PM dari Waktu ke Waktu')
-            plt.xlabel('Tanggal')
-            plt.ylabel('Konsentrasi PM')
-            plt.xticks(rotation=45)
-            plt.legend()
-            plt.tight_layout()
-            
-            # Menampilkan grafik di Streamlit
-            st.pyplot(plt)
-        else:
-            st.error("Tidak ada kolom PM yang ditemukan dalam data.")
+                plt.title(f'Grafik {col} dari Waktu ke Waktu')
+                plt.xlabel('Tanggal')
+                plt.ylabel(f'Konsentrasi {col}')
+                plt.xticks(rotation=45)
+                plt.legend()
+                plt.tight_layout()
+                
+                # Menampilkan grafik di Streamlit
+                st.pyplot(plt)
+            else:
+                st.error(f"Kolom '{col}' tidak ditemukan dalam data.")
     
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
