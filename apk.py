@@ -115,19 +115,6 @@ with st.container():
         # Menghapus kolom yang tidak diinginkan
         data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
 
-        # Pastikan kolom tanggal sudah ada dan dalam format datetime
-        data['tanggal'] = pd.to_datetime(data['tanggal'])
-        
-        # Konversi kolom polutan ke tipe data integer
-        polutan_columns = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
-        data[polutan_columns] = data[polutan_columns].astype(float)  # Ubah menjadi float terlebih dahulu untuk menghindari error
-        data[polutan_columns] = data[polutan_columns].fillna(0).astype(int)  # Ganti NaN dengan 0, lalu ubah ke integer
-        
-        # Resample data
-        data_resample = data.set_index('tanggal').resample('D').mean().reset_index()
-        
-        # Menampilkan dataframe
-        st.title("Dataset Kualitas Udara DKI Jakarta")
         st.dataframe(data, width=600)
         
         # Cek apakah kolom yang ingin dipetakan ada di DataFrame
