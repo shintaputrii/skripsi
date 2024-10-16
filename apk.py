@@ -117,53 +117,68 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
         
-        # Mengubah kolom 'tanggal' menjadi tipe datetime dengan penanganan error
-        data['tanggal'] = pd.to_datetime(data['tanggal'], errors='coerce')
+        # Mengubah kolom 'tanggal' menjadi format datetime
+        data['tanggal'] = pd.to_datetime(data['tanggal'])
         
-        # Periksa nilai NaT (tidak valid)
-        invalid_dates = data[data['tanggal'].isna()]
-        if not invalid_dates.empty:
-            st.write("Nilai tidak valid dalam kolom tanggal:")
-            st.dataframe(invalid_dates)
+        # Resample data harian dan menghitung rata-rata
+        data_resample = data.set_index('tanggal').resample('D').mean().reset_index()
         
-        # Menentukan bulan sebagai index
-        data.set_index('tanggal', inplace=True)
+        # Menentukan ukuran figure untuk subplot
+        plt.figure(figsize=(12, 18))  # Ukuran figure untuk 6 subplot
         
-        # Membulatkan kolom numerik ke puluhan terdekat
-        numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
-        data[numeric_columns] = data[numeric_columns] // 10 * 10  # Membulatkan ke puluhan terdekat
+        # Plot PM10
+        plt.subplot(6, 1, 1)  # 6 baris, 1 kolom, subplot ke-1
+        plt.plot(data_resample['tanggal'], data_resample['pm_sepuluh'], color='red')
+        plt.title('Konsentrasi PM10')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi (µg/m³)')
+        plt.grid()
         
-        # Daftar kolom yang ingin ditampilkan
-        pollutant_columns = ['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']
+        # Plot PM2.5
+        plt.subplot(6, 1, 2)  # subplot ke-2
+        plt.plot(data_resample['tanggal'], data_resample['pm_duakomalima'], color='yellow')
+        plt.title('Konsentrasi PM2.5')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi (µg/m³)')
+        plt.grid()
         
-        # Menampilkan grafik untuk setiap kolom satu per satu
-        for col in pollutant_columns:
-            if col in data.columns:
-                st.subheader(f"Grafik {col}")
-                
-                plt.figure(figsize=(12, 6))
-                
-                # Resampling data untuk per bulan
-                monthly_data = data[col].resample('M').mean()
-                
-                plt.plot(monthly_data.index, monthly_data, marker='o', label=col)
-                plt.title(f'Grafik {col} per Bulan')
-                plt.xlabel('Bulan')
-                plt.ylabel(f'Konsentrasi {col} (dalam puluhan)')
-                
-                # Mengatur format tanggal pada sumbu x
-                plt.xticks(rotation=45)
-                
-                # Mengatur label sumbu y untuk angka yang terlihat
-                plt.yticks(range(0, 101, 10))  # Sesuaikan rentang jika perlu
-                
-                plt.legend()
-                plt.tight_layout()
-                
-                # Menampilkan grafik di Streamlit
-                st.pyplot(plt)
-            else:
-        st.error(f"Kolom '{col}' tidak ditemukan dalam data.")
+        # Plot Karbon Monoksida
+        plt.subplot(6, 1, 3)  # subplot ke-3
+        plt.plot(data_resample['tanggal'], data_resample['karbon_monoksida'], color='green')
+        plt.title('Konsentrasi Karbon Monoksida')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi (µg/m³)')
+        plt.grid()
+        
+        # Plot Ozon
+        plt.subplot(6, 1, 4)  # subplot ke-4
+        plt.plot(data_resample['tanggal'], data_resample['ozon'], color='magenta')
+        plt.title('Konsentrasi Ozon')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi (µg/m³)')
+        plt.grid()
+        
+        # Plot Nitrogen Dioksida
+        plt.subplot(6, 1, 5)  # subplot ke-5
+        plt.plot(data_resample['tanggal'], data_resample['nitrogen_dioksida'], color='black')
+        plt.title('Konsentrasi Nitrogen Dioksida')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi (µg/m³)')
+        plt.grid()
+        
+        # Plot Sulfur Dioksida
+        plt.subplot(6, 1, 6)  # subplot ke-6
+        plt.plot(data_resample['tanggal'], data_resample['sulfur_dioksida'], color='blue')
+        plt.title('Konsentrasi Sulfur Dioksida')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi (µg/m³)')
+        plt.grid()
+        
+        # Menyesuaikan layout untuk menghindari tumpang tindih
+        plt.tight_layout()
+        
+        # Menampilkan plot
+        plt.show()
     
     elif selected == "Preprocessing":
         # MEAN IMPUTATION
