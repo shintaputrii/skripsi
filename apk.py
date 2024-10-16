@@ -353,7 +353,18 @@ with st.container():
 
         # Modeling PM2.5
         st.subheader("Modelling PM2.5")
+
+        # Fungsi untuk normalisasi data
+        def normalize_data(data):
+            scaler = MinMaxScaler()
+            normalized_data = scaler.fit_transform(data)
+            return normalized_data, scaler
         
+        # Fungsi untuk menghitung keanggotaan fuzzy (inverse distance)
+        def calculate_membership_inverse(distances, epsilon=1e-10):
+            memberships = 1 / (distances + epsilon)
+            return memberships
+            
         # Fungsi Fuzzy KNN untuk PM2.5
         def fuzzy_knn_predict_pm25(data, k=3, test_size=0.3):
             # Normalisasi data PM2.5
