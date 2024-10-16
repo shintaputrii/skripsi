@@ -131,11 +131,11 @@ with st.container():
         
         # Mengganti nilai '-' dengan NaN
         data.replace(r'-+', np.nan, regex=True, inplace=True)
-
+        
         # Menampilkan jumlah missing value per kolom
         missing_values = data.isnull().sum()
         st.write("Jumlah Missing Value per Kolom:")
-        st.dataframe(missing_values[missing_values > 0].reset_index(name='missing_values')
+        st.dataframe(missing_values[missing_values > 0].reset_index(name='missing_values'))
         
         # Mengidentifikasi kolom numerik
         numeric_cols = data.select_dtypes(include=np.number).columns
@@ -145,7 +145,8 @@ with st.container():
         
         # Konversi kolom yang disebutkan ke tipe data integer
         data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
-
+        
+        # Menampilkan data yang telah diproses
         st.dataframe(data, width=600)
 
         # PLOTING DATA
