@@ -143,14 +143,6 @@ with st.container():
 
         st.dataframe(data, width=600)
 
-        # UNIVARIATE TRANSFORM
-        st.subheader("""Univariate Transform""")
-        imports_pm10 = imputed_df["pm10"].values
-        imports_so2 = imports = imputed_df["so2"].values
-        imports_co = imports = imputed_df["co"].values
-        imports_no2 = imports = imputed_df["no2"].values
-        imports_o3 = imports = imputed_df["o3"].values
-
         def split_sequence(sequence, n_steps):
             X, y = list(), list()
             for i in range(len(sequence)):
