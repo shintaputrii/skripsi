@@ -500,6 +500,7 @@ with st.container():
             mapes_sulfur.append(mape)
 
     elif selected == "Next Day":   
+        st.subheader("PM10")       
         # Fungsi untuk normalisasi data
         def normalize_data(data):
             scaler = MinMaxScaler()
@@ -577,26 +578,45 @@ with st.container():
         # Konversi kolom yang disebutkan ke tipe data integer
         data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
         
-        # Streamlit Interface
-        st.title("Prediksi Konsentrasi PM")
+        # Input dari pengguna
+        user_input = st.number_input("Masukkan konsentrasi PM 10:", min_value=0.0)
         
-        selected = st.sidebar.selectbox("Pilih Jenis PM:", ["Next Day", "PM10", "PM2.5"])
-        
-        if selected == "PM10":
-            st.subheader("Prediksi Konsentrasi PM10")
-            user_input = st.number_input("Masukkan konsentrasi PM 10:", min_value=0.0)
-        
-            if st.button("Prediksi"):
-                prediction = fuzzy_knn_predict(data, "pm_sepuluh", user_input, k=3)
-                st.write(f"Prediksi konsentrasi PM 10 esok hari: {prediction:.2f}")
-        
-        elif selected == "PM2.5":
-            st.subheader("Prediksi Konsentrasi PM2.5")
-            user_input = st.number_input("Masukkan konsentrasi PM 2.5:", min_value=0.0)
-        
+        # Prediksi berdasarkan input pengguna
+        if st.button("Prediksi"):
+            prediction = fuzzy_knn_predict(data, "pm_sepuluh", user_input, k=3)
+            st.write(f"Prediksi konsentrasi PM 10 esok hari: {prediction:.2f}")
+            
+        st.subheader("PM25")
+            # Muat dan bersihkan data dari file
+            data = pd.read_excel(
+                "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
+            )
+            
+            # Menghapus kolom yang tidak diinginkan
+            data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+            
+            # Mengganti nilai '-' dengan NaN
+            data.replace(r'-+', np.nan, regex=True, inplace=True)
+            
+            # Menampilkan jumlah missing value per kolom
+            missing_values = data.isnull().sum()
+            
+            # Mengidentifikasi kolom numerik
+            numeric_cols = data.select_dtypes(include=np.number).columns
+            
+            # Imputasi mean untuk kolom numerik
+            data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+            
+            # Konversi kolom yang disebutkan ke tipe data integer
+            data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+            
+            # Input dari pengguna
+            user_input = st.number_input("Masukkan konsentrasi PM 25:", min_value=0.0)
+            
+            # Prediksi berdasarkan input pengguna
             if st.button("Prediksi"):
                 prediction = fuzzy_knn_predict(data, "pm_duakomalima", user_input, k=3)
-                st.write(f"Prediksi konsentrasi PM 2.5 esok hari: {prediction:.2f}")
+                st.write(f"Prediksi konsentrasi PM 25: {prediction:.2f}")
 
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
