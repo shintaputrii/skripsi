@@ -495,7 +495,72 @@ with st.container():
             mapes_sulfur.append(mape)
 
     elif selected == "About Me":
-        st.write("Shinta Alya Imani Putri \n (200411100005) \n Teknik Informatika")
+        st.subheader("Prediksi Esok")
+        import numpy as np
+        import pandas as pd
+        from sklearn.impute import SimpleImputer
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.neighbors import KNeighborsRegressor
+        from sklearn.model_selection import train_test_split
+        
+        # Fungsi untuk normalisasi data
+        def normalize_data(data):
+            scaler = MinMaxScaler()
+            normalized_data = scaler.fit_transform(data)
+            return normalized_data, scaler
+        
+        # Fungsi untuk menghitung keanggotaan fuzzy (inverse distance)
+        def calculate_membership_inverse(distances, epsilon=1e-10):
+            memberships = 1 / (distances + epsilon)
+            return memberships
+        
+        # Fungsi Fuzzy KNN untuk prediksi
+        def fuzzy_knn_predict(data, pollutant, user_input, k=3):
+            # Normalisasi data
+            imports = data[pollutant].values.reshape(-1, 1)
+            data[f'{pollutant}_normalized'], scaler = normalize_data(imports)
+        
+            # Ekstrak fitur dan target
+            X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)
+            y = data[f'{pollutant}_normalized'].values[1:]
+        
+            # Bagi data menjadi train dan test
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, shuffle=False)
+        
+            # Normalisasi input dari pengguna
+            user_input_scaled = scaler.transform(np.array([[user_input]]))
+        
+            # Inisialisasi model KNN
+            knn = KNeighborsRegressor(n_neighbors=k, weights='distance')
+            knn.fit(X_train, y_train)
+        
+            # Mendapatkan tetangga dan jaraknya
+            distances, indices = knn.kneighbors(user_input_scaled, n_neighbors=k, return_distance=True)
+        
+            # Hitung prediksi
+            neighbor_distances = distances[0]
+            neighbor_indices = indices[0]
+            neighbor_targets = y_train[neighbor_indices]
+            memberships = calculate_membership_inverse(neighbor_distances)
+        
+            y_pred = np.sum(memberships * neighbor_targets) / np.sum(memberships)
+            y_pred_original = scaler.inverse_transform([[y_pred]])
+        
+            return y_pred_original[0][0]
+        
+        # Muat data dari file
+        data_resample = pd.read_excel("kualitasudara.xlsx")[["tanggal", "pm_sepuluh", "pm_duakomalima", "sulfur_dioksida", "karbon_monoksida", "ozon", "nitrogen_dioksida"]]
+        
+        # Inisialisasi imputer dan imputasi
+        imputer = SimpleImputer(strategy='mean')
+        for col in data_resample.columns[1:]:
+            data_resample[col] = imputer.fit_transform(data_resample[[col]])
+        
+        # Prediksi untuk PM Sepuluh
+        user_input = float(input("Masukkan konsentrasi PM Sepuluh: "))
+        prediction = fuzzy_knn_predict(data_resample, 'pm_sepuluh', user_input)
+        print(f"Prediksi untuk PM Sepuluh: {prediction}")
+
         
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
