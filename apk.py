@@ -992,24 +992,6 @@ with st.container():
             st.write(f"Prediksi konsentrasi Nitrogen Dioksida esok hari: {prediction:.2f}")
 
         st.subheader("Prediksi Kualitas Udara")
-        # Definisikan kategori AQI
-        def categorize_aqi(value):
-            if value <= 50:
-                return "Good"
-            elif value <= 100:
-                return "Moderate"
-            elif value <= 150:
-                return "Unhealthy for Sensitive Groups"
-            elif value <= 200:
-                return "Unhealthy"
-            elif value <= 300:
-                return "Very Unhealthy"
-            else:
-                return "Hazardous"
-        
-        # List untuk menyimpan hasil prediksi
-        predictions = []
-        
         # Fungsi untuk normalisasi data
         def normalize_data(data):
             scaler = MinMaxScaler()
@@ -1023,63 +1005,71 @@ with st.container():
         
         # Fungsi Fuzzy KNN untuk prediksi
         def fuzzy_knn_predict(data, pollutant, user_input, k=3):
-            # Normalisasi data
             imports = data[pollutant].values.reshape(-1, 1)
             data[f'{pollutant}_normalized'], scaler = normalize_data(imports)
         
-            # Ekstrak fitur dan target
             X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)
             y = data[f'{pollutant}_normalized'].values[1:]
         
-            # Bagi data menjadi train dan test
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, shuffle=False)
         
-            # Normalisasi input dari pengguna
             user_input_scaled = scaler.transform(np.array([[user_input]]))
         
-            # Inisialisasi model KNN
             knn = KNeighborsRegressor(n_neighbors=k, weights='distance')
             knn.fit(X_train, y_train)
         
-            # Mendapatkan tetangga dan jaraknya
             distances, indices = knn.kneighbors(user_input_scaled, n_neighbors=k, return_distance=True)
         
-            # Inisialisasi array untuk menyimpan prediksi
             y_pred = np.zeros(1)
         
-            # Loop untuk menghitung prediksi berdasarkan membership
             for i in range(1):
                 neighbor_distances = distances[i]
                 neighbor_indices = indices[i]
                 neighbor_targets = y_train[neighbor_indices]
         
-                # Hitung membership
                 memberships = calculate_membership_inverse(neighbor_distances)
-        
-                # Hitung prediksi sebagai weighted average
                 y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
         
-            # Mengembalikan nilai prediksi ke skala awal
             y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))
+        
             return y_pred_original[0][0]
         
-        # Input dari pengguna untuk berbagai polutan
+        # Muat dan bersihkan data dari file
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
+        )
+        
+        # Menghapus kolom yang tidak diinginkan
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+        
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+        
+        # Imputasi mean untuk kolom numerik
+        numeric_cols = data.select_dtypes(include=np.number).columns
+        data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+        
+        # Konversi kolom yang disebutkan ke tipe data integer
+        data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+        
+        # Input dari pengguna untuk semua polutan
+        user_inputs = {}
         pollutants = ["pm_sepuluh", "pm_duakomalima", "sulfur_dioksida", "karbon_monoksida", "ozon", "nitrogen_dioksida"]
+        
         for pollutant in pollutants:
-            user_input = st.number_input(f"Masukkan konsentrasi {pollutant.replace('_', ' ').title()}:", min_value=0.0)
+            user_inputs[pollutant] = st.number_input(f"Masukkan konsentrasi {pollutant.replace('_', ' ').title()}:", min_value=0.0)
         
-            if st.button(f"Prediksi {pollutant}"):
-                prediction = fuzzy_knn_predict(data, pollutant, user_input, k=3)
-                st.write(f"Prediksi konsentrasi {pollutant.replace('_', ' ').title()} esok hari: {prediction:.2f}")
-                predictions.append((pollutant, prediction))
-        
-        # Mencari nilai polutan tertinggi
-        highest_pollutant = max(predictions, key=lambda x: x[1])
-        st.write(f"Polutan tertinggi adalah {highest_pollutant[0]} dengan nilai {highest_pollutant[1]:.2f}")
-        
-        # Kategorikan berdasarkan AQI
-        aqi_category = categorize_aqi(highest_pollutant[1])
-        st.write(f"Kategori AQI untuk nilai {highest_pollutant[1]:.2f} adalah: {aqi_category}")
+        # Prediksi berdasarkan input pengguna
+        if st.button("Prediksi Semua Polutan"):
+            predictions = {}
+            for pollutant in pollutants:
+                prediction = fuzzy_knn_predict(data, pollutant, user_inputs[pollutant], k=3)
+                predictions[pollutant] = prediction
+            
+            # Tampilkan semua prediksi dalam format tabel
+            predictions_data = pd.DataFrame(predictions, index=[0])
+            st.write(predictions_data)
+
 
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
