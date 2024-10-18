@@ -495,14 +495,7 @@ with st.container():
             mapes_sulfur.append(mape)
 
     elif selected == "Next Day":
-        st.subheader("Prediksi Esok")
-        import numpy as np
-        import pandas as pd
-        from sklearn.impute import SimpleImputer
-        from sklearn.preprocessing import MinMaxScaler
-        from sklearn.neighbors import KNeighborsRegressor
-        from sklearn.model_selection import train_test_split
-        
+        st.subheader("Prediksi Esok")        
         # Fungsi untuk normalisasi data
         def normalize_data(data):
             scaler = MinMaxScaler()
@@ -521,10 +514,10 @@ with st.container():
             data[f'{pollutant}_normalized'], scaler = normalize_data(imports)
         
             # Ekstrak fitur dan target
-            X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)
-            y = data[f'{pollutant}_normalized'].values[1:]
+            X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)  # Menggunakan semua data kecuali yang terakhir
+            y = data[f'{pollutant}_normalized'].values[1:]  # Menggunakan data yang dimulai dari yang kedua
         
-            # Bagi data menjadi train dan test
+            # Bagi data menjadi train dan test (90% train, 10% test)
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, shuffle=False)
         
             # Normalisasi input dari pengguna
@@ -537,29 +530,43 @@ with st.container():
             # Mendapatkan tetangga dan jaraknya
             distances, indices = knn.kneighbors(user_input_scaled, n_neighbors=k, return_distance=True)
         
-            # Hitung prediksi
-            neighbor_distances = distances[0]
-            neighbor_indices = indices[0]
-            neighbor_targets = y_train[neighbor_indices]
-            memberships = calculate_membership_inverse(neighbor_distances)
+            # Inisialisasi array untuk menyimpan prediksi
+            y_pred = np.zeros(1)
         
-            y_pred = np.sum(memberships * neighbor_targets) / np.sum(memberships)
-            y_pred_original = scaler.inverse_transform([[y_pred]])
+            # Loop untuk menghitung prediksi berdasarkan membership
+            for i in range(1):
+                neighbor_distances = distances[i]
+                neighbor_indices = indices[i]
+                neighbor_targets = y_train[neighbor_indices]
+        
+                # Hitung membership untuk tetangga-tetangga ini
+                memberships = calculate_membership_inverse(neighbor_distances)
+        
+                # Hitung prediksi sebagai weighted average berdasarkan keanggotaan fuzzy
+                y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
+        
+            # Mengembalikan nilai prediksi ke skala awal
+            y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))
         
             return y_pred_original[0][0]
         
         # Muat data dari file
-        data_resample = pd.read_excel("kualitasudara.xlsx")[["tanggal", "pm_sepuluh", "pm_duakomalima", "sulfur_dioksida", "karbon_monoksida", "ozon", "nitrogen_dioksida"]]
+        data_resample = pd.read_excel("kualitasudara.xlsx")[["tanggal", "pm_duakomalima"]]
         
-        # Inisialisasi imputer dan imputasi
+        # Inisialisasi imputer
         imputer = SimpleImputer(strategy='mean')
-        for col in data_resample.columns[1:]:
-            data_resample[col] = imputer.fit_transform(data_resample[[col]])
         
-        # Prediksi untuk PM Sepuluh
-        user_input = float(input("Masukkan konsentrasi PM Sepuluh: "))
-        prediction = fuzzy_knn_predict(data_resample, 'pm_sepuluh', user_input)
-        print(f"Prediksi untuk PM Sepuluh: {prediction}")
+        # Imputasi nilai yang hilang
+        data_resample["pm_duakomalima"] = imputer.fit_transform(data_resample[["pm_duakomalima"]])
+        
+        # Terima input dari pengguna
+        user_input = float(input("Masukkan konsentrasi PM 2.5: "))  # Menggunakan nama polutan
+        
+        # Prediksi berdasarkan input pengguna
+        prediction = fuzzy_knn_predict(data_resample, "pm_duakomalima", user_input, k=5)
+        
+        # Tampilkan hasil prediksi
+        print(f"Prediksi konsentrasi PM 2.5 esok hari: {prediction:.2f}")
 
         
     # Menampilkan penanda
