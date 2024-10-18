@@ -1057,7 +1057,7 @@ with st.container():
         pollutants = ["pm_sepuluh", "pm_duakomalima", "sulfur_dioksida", "karbon_monoksida", "ozon", "nitrogen_dioksida"]
         
         for pollutant in pollutants:
-            user_inputs[pollutant] = st.number_input(f"Masukkan konsentrasi {pollutant.replace('_', ' ').title()}:", min_value=0.0)
+            user_inputs[pollutant] = st.number_input(f"Masukkan konsentrasi {pollutant.replace('_', ' ').title()}:", min_value=0.0, key=pollutant)
         
         # Prediksi berdasarkan input pengguna
         if st.button("Prediksi Semua Polutan"):
@@ -1069,7 +1069,6 @@ with st.container():
             # Tampilkan semua prediksi dalam format tabel
             predictions_data = pd.DataFrame(predictions, index=[0])
             st.write(predictions_data)
-
 
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
