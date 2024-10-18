@@ -1069,11 +1069,10 @@ with st.container():
             # Tampilkan semua prediksi dalam format tabel
             predictions_data = pd.DataFrame(predictions, index=[0])
             st.write(predictions_data)
-
-           # Menentukan polutan tertinggi dan kategorinya
+        # Menentukan polutan tertinggi dan kategorinya
         max_pollutant = max(predictions, key=predictions.get)
         max_value = predictions[max_pollutant]
-    
+        
         # Menentukan kategori berdasarkan nilai
         if max_value <= 50:
             category = "Baik"
@@ -1083,16 +1082,17 @@ with st.container():
             category = "Tidak Sehat"
         else:
             category = "Berbahaya"
-    
+        
         # Buat DataFrame untuk polutan tertinggi
         highest_pollutant_data = pd.DataFrame({
             "Polutan_Tertinggi": [max_pollutant],
             "Nilai_Tertinggi": [max_value],
             "Kategori": [category]
         })
-    
+        
         # Tampilkan tabel polutan tertinggi
         st.write(highest_pollutant_data)
+
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
     st.write("Shinta Alya Imani Putri-200411100005 (Teknik Informatika)")
