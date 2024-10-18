@@ -553,7 +553,7 @@ with st.container():
             return y_pred_original[0][0]
         
         # Muat data dari file
-        data_resample = pd.read_excel("kualitasudara.xlsx")[["tanggal", "pm_duakomalima"]]
+        data_resample = pd.read_excel("kualitas_udara_.xlsx")[["tanggal", "pm_duakomalima"]]
         
         # Inisialisasi imputer
         imputer = SimpleImputer(strategy='mean')
