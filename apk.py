@@ -500,7 +500,7 @@ with st.container():
             mapes_sulfur.append(mape)
 
     elif selected == "Next Day":
-        st.subheader("Prediksi Esok")        
+        st.subheader("Prediksi Esok")       
         # Fungsi untuk normalisasi data
         def normalize_data(data):
             scaler = MinMaxScaler()
@@ -519,10 +519,10 @@ with st.container():
             data[f'{pollutant}_normalized'], scaler = normalize_data(imports)
         
             # Ekstrak fitur dan target
-            X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)  # Menggunakan semua data kecuali yang terakhir
-            y = data[f'{pollutant}_normalized'].values[1:]  # Menggunakan data yang dimulai dari yang kedua
+            X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)
+            y = data[f'{pollutant}_normalized'].values[1:]
         
-            # Bagi data menjadi train dan test (90% train, 10% test)
+            # Bagi data menjadi train dan test
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, shuffle=False)
         
             # Normalisasi input dari pengguna
@@ -544,10 +544,10 @@ with st.container():
                 neighbor_indices = indices[i]
                 neighbor_targets = y_train[neighbor_indices]
         
-                # Hitung membership untuk tetangga-tetangga ini
+                # Hitung membership
                 memberships = calculate_membership_inverse(neighbor_distances)
         
-                # Hitung prediksi sebagai weighted average berdasarkan keanggotaan fuzzy
+                # Hitung prediksi sebagai weighted average
                 y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
         
             # Mengembalikan nilai prediksi ke skala awal
@@ -555,23 +555,41 @@ with st.container():
         
             return y_pred_original[0][0]
         
-        # Muat data dari file
-        data_resample = pd.read_excel("kualitas_udara.xlsx")[["tanggal", "pm_duakomalima"]]
+        # Aplikasi Streamlit
+        st.title("Prediksi Konsentrasi PM 2.5 Esok Hari")
         
-        # Inisialisasi imputer
-        imputer = SimpleImputer(strategy='mean')
+        # Muat dan bersihkan data dari file
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
+        )
         
-        # Imputasi nilai yang hilang
-        data_resample["pm_duakomalima"] = imputer.fit_transform(data_resample[["pm_duakomalima"]])
+        # Menghapus kolom yang tidak diinginkan
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
         
-        # Terima input dari pengguna
-        user_input = float(input("Masukkan konsentrasi PM 2.5: "))  # Menggunakan nama polutan
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+        
+        # Menampilkan jumlah missing value per kolom
+        missing_values = data.isnull().sum()
+        st.write("Jumlah Missing Value per Kolom:")
+        st.dataframe(missing_values[missing_values > 0].reset_index(name='missing_values'))
+        
+        # Mengidentifikasi kolom numerik
+        numeric_cols = data.select_dtypes(include=np.number).columns
+        
+        # Imputasi mean untuk kolom numerik
+        data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+        
+        # Konversi kolom yang disebutkan ke tipe data integer
+        data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+        
+        # Input dari pengguna
+        user_input = st.number_input("Masukkan konsentrasi PM 2.5:", min_value=0.0)
         
         # Prediksi berdasarkan input pengguna
-        prediction = fuzzy_knn_predict(data_resample, "pm_duakomalima", user_input, k=5)
-        
-        # Tampilkan hasil prediksi
-        print(f"Prediksi konsentrasi PM 2.5 esok hari: {prediction:.2f}")
+        if st.button("Prediksi"):
+            prediction = fuzzy_knn_predict(data, "pm_duakomalima", user_input, k=5)
+            st.write(f"Prediksi konsentrasi PM 2.5 esok hari: {prediction:.2f}")
 
         
     # Menampilkan penanda
