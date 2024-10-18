@@ -146,6 +146,8 @@ with st.container():
         
         # Konversi kolom yang disebutkan ke tipe data integer
         data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+        # Menyimpan data ke format XLSX
+        data.to_excel('kualitas_udara.xlsx', index=False)
         
         # Menampilkan data yang telah diproses
         st.dataframe(data, width=600)
@@ -174,6 +176,7 @@ with st.container():
         
         # Resample data harian dan menghitung rata-rata
         data_resample = data.set_index('tanggal').resample('D').mean().reset_index()
+        
         
         # Menentukan ukuran figure untuk subplot
         plt.figure(figsize=(12, 18))  # Ukuran figure untuk 6 subplot
@@ -553,7 +556,7 @@ with st.container():
             return y_pred_original[0][0]
         
         # Muat data dari file
-        data_resample = pd.read_excel("kualitas_udara_.xlsx")[["tanggal", "pm_duakomalima"]]
+        data_resample = pd.read_excel("kualitas_udara.xlsx")[["tanggal", "pm_duakomalima"]]
         
         # Inisialisasi imputer
         imputer = SimpleImputer(strategy='mean')
