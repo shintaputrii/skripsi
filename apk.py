@@ -582,7 +582,7 @@ with st.container():
         user_input = st.number_input("Masukkan konsentrasi PM 10:", min_value=0.0)
         
         # Prediksi berdasarkan input pengguna
-        if st.button("Prediksi"):
+        if st.button("Prediksi10"):
             prediction = fuzzy_knn_predict(data, "pm_sepuluh", user_input, k=3)
             st.write(f"Prediksi konsentrasi PM 10 esok hari: {prediction:.2f}")
 
@@ -663,7 +663,7 @@ with st.container():
         user_input = st.number_input("Masukkan konsentrasi PM 2.5:", min_value=0.0)
         
         # Prediksi berdasarkan input pengguna
-        if st.button("Prediksi"):
+        if st.button("Prediksi 25"):
             prediction = fuzzy_knn_predict(data, "pm_duakomalima", user_input, k=3)
             st.write(f"Prediksi konsentrasi PM 2.5 esok hari: {prediction:.2f}")
         
@@ -744,7 +744,7 @@ with st.container():
         user_input = st.number_input("Masukkan konsentrasi Sulfur Dioksida:", min_value=0.0)
         
         # Prediksi berdasarkan input pengguna
-        if st.button("Prediksi"):
+        if st.button("Prediksi SO2"):
             prediction = fuzzy_knn_predict(data, "sulfur_dioksida", user_input, k=3)
             st.write(f"Prediksi konsentrasi Sulfur Dioksida esok hari: {prediction:.2f}")
 
@@ -825,7 +825,7 @@ with st.container():
         user_input = st.number_input("Masukkan konsentrasi Karbon Monoksida:", min_value=0.0)
         
         # Prediksi berdasarkan input pengguna
-        if st.button("Prediksi"):
+        if st.button("Prediksi CO"):
             prediction = fuzzy_knn_predict(data, "karbon_monoksida", user_input, k=3)
             st.write(f"Prediksi konsentrasi Karbon Monoksida esok hari: {prediction:.2f}")
         
@@ -906,7 +906,7 @@ with st.container():
         user_input = st.number_input("Masukkan konsentrasi Ozon:", min_value=0.0)
         
         # Prediksi berdasarkan input pengguna
-        if st.button("Prediksi Ozon"):
+        if st.button("Prediksi O3"):
             prediction = fuzzy_knn_predict(data, "ozon", user_input, k=3)
             st.write(f"Prediksi konsentrasi Ozon esok hari: {prediction:.2f}")
 
