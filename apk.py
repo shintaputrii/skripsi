@@ -260,7 +260,7 @@ with st.container():
         # Tampilkan semua kolom polutan dan kolom normalisasi mereka
         st.write(data[[f'{col}' for col in pollutants] + [f'{col}_normalized' for col in pollutants]])
 
-    elif selected == "Modeling":
+    elif selected == "Hasil MAPE":
         # Membaca dataset dari file Excel
         data = pd.read_excel(
             "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
@@ -494,7 +494,7 @@ with st.container():
             mape = fuzzy_knn_predict_sulfur(data, k=3, test_size=test_size)
             mapes_sulfur.append(mape)
 
-    elif selected == "About Me":
+    elif selected == "Next Day":
         st.subheader("Prediksi Esok")
         import numpy as np
         import pandas as pd
