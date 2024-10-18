@@ -571,8 +571,6 @@ with st.container():
         
         # Menampilkan jumlah missing value per kolom
         missing_values = data.isnull().sum()
-        st.write("Jumlah Missing Value per Kolom:")
-        st.dataframe(missing_values[missing_values > 0].reset_index(name='missing_values'))
         
         # Mengidentifikasi kolom numerik
         numeric_cols = data.select_dtypes(include=np.number).columns
