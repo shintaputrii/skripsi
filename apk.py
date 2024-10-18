@@ -280,6 +280,8 @@ with st.container():
         
         # Konversi kolom PM10 ke tipe data integer
         data['pm_sepuluh'] = data['pm_sepuluh'].astype(int)
+        # Menyimpan data ke format XLSX
+        data.to_excel('kualitas_udara_.xlsx', index=False)
         
         # Bagian MODELLING
         st.subheader("Modelling PM10")
