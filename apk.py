@@ -910,6 +910,87 @@ with st.container():
             prediction = fuzzy_knn_predict(data, "ozon", user_input, k=3)
             st.write(f"Prediksi konsentrasi Ozon esok hari: {prediction:.2f}")
 
+        st.subheader(NO2)
+        # Fungsi untuk normalisasi data
+        def normalize_data(data):
+            scaler = MinMaxScaler()
+            normalized_data = scaler.fit_transform(data)
+            return normalized_data, scaler
+        
+        # Fungsi untuk menghitung keanggotaan fuzzy (inverse distance)
+        def calculate_membership_inverse(distances, epsilon=1e-10):
+            memberships = 1 / (distances + epsilon)
+            return memberships
+        
+        # Fungsi Fuzzy KNN untuk prediksi
+        def fuzzy_knn_predict(data, pollutant, user_input, k=3):
+            # Normalisasi data
+            imports = data[pollutant].values.reshape(-1, 1)
+            data[f'{pollutant}_normalized'], scaler = normalize_data(imports)
+        
+            # Ekstrak fitur dan target
+            X = data[f'{pollutant}_normalized'].values[:-1].reshape(-1, 1)
+            y = data[f'{pollutant}_normalized'].values[1:]
+        
+            # Bagi data menjadi train dan test
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, shuffle=False)
+        
+            # Normalisasi input dari pengguna
+            user_input_scaled = scaler.transform(np.array([[user_input]]))
+        
+            # Inisialisasi model KNN
+            knn = KNeighborsRegressor(n_neighbors=k, weights='distance')
+            knn.fit(X_train, y_train)
+        
+            # Mendapatkan tetangga dan jaraknya
+            distances, indices = knn.kneighbors(user_input_scaled, n_neighbors=k, return_distance=True)
+        
+            # Inisialisasi array untuk menyimpan prediksi
+            y_pred = np.zeros(1)
+        
+            # Loop untuk menghitung prediksi berdasarkan membership
+            for i in range(1):
+                neighbor_distances = distances[i]
+                neighbor_indices = indices[i]
+                neighbor_targets = y_train[neighbor_indices]
+        
+                # Hitung membership
+                memberships = calculate_membership_inverse(neighbor_distances)
+        
+                # Hitung prediksi sebagai weighted average
+                y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
+        
+            # Mengembalikan nilai prediksi ke skala awal
+            y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))
+        
+            return y_pred_original[0][0]
+        
+        # Muat dan bersihkan data dari file
+        data = pd.read_excel(
+            "https://raw.githubusercontent.com/shintaputrii/skripsi/main/kualitasudara.xlsx"
+        )
+        
+        # Menghapus kolom yang tidak diinginkan
+        data = data.drop(['periode_data', 'stasiun', 'parameter_pencemar_kritis', 'max', 'kategori'], axis=1)
+        
+        # Mengganti nilai '-' dengan NaN
+        data.replace(r'-+', np.nan, regex=True, inplace=True)
+        
+        # Imputasi mean untuk kolom numerik
+        numeric_cols = data.select_dtypes(include=np.number).columns
+        data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+        
+        # Konversi kolom yang disebutkan ke tipe data integer
+        data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']] = data[['pm_sepuluh', 'pm_duakomalima', 'sulfur_dioksida', 'karbon_monoksida', 'ozon', 'nitrogen_dioksida']].astype(int)
+        
+        # Input dari pengguna untuk Nitrogen Dioksida
+        user_input = st.number_input("Masukkan konsentrasi Nitrogen Dioksida:", min_value=0.0)
+        
+        # Prediksi berdasarkan input pengguna
+        if st.button("Prediksi NO2"):
+            prediction = fuzzy_knn_predict(data, "nitrogen_dioksida", user_input, k=3)
+            st.write(f"Prediksi konsentrasi Nitrogen Dioksida esok hari: {prediction:.2f}")
+
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
     st.write("Shinta Alya Imani Putri-200411100005 (Teknik Informatika)")
