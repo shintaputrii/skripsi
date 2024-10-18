@@ -1069,29 +1069,29 @@ with st.container():
             # Tampilkan semua prediksi dalam format tabel
             predictions_data = pd.DataFrame(predictions, index=[0])
             st.write(predictions_data)
-        # Menentukan polutan tertinggi dan kategorinya
-        max_pollutant = max(predictions, key=predictions.get)
-        max_value = predictions[max_pollutant]
-        
-        # Menentukan kategori berdasarkan nilai
-        if max_value <= 50:
-            category = "Baik"
-        elif max_value <= 100:
-            category = "Sedang"
-        elif max_value <= 150:
-            category = "Tidak Sehat"
-        else:
-            category = "Berbahaya"
-        
-        # Buat DataFrame untuk polutan tertinggi
-        highest_pollutant_data = pd.DataFrame({
-            "Polutan_Tertinggi": [max_pollutant],
-            "Nilai_Tertinggi": [max_value],
-            "Kategori": [category]
-        })
-        
-        # Tampilkan tabel polutan tertinggi
-        st.write(highest_pollutant_data)
+            # Menentukan polutan tertinggi dan kategorinya
+            max_pollutant = max(predictions, key=predictions.get)
+            max_value = predictions[max_pollutant]
+            
+            # Menentukan kategori berdasarkan nilai
+            if max_value <= 50:
+                category = "Baik"
+            elif max_value <= 100:
+                category = "Sedang"
+            elif max_value <= 150:
+                category = "Tidak Sehat"
+            else:
+                category = "Berbahaya"
+            
+            # Buat DataFrame untuk polutan tertinggi
+            highest_pollutant_data = pd.DataFrame({
+                "Polutan_Tertinggi": [max_pollutant],
+                "Nilai_Tertinggi": [max_value],
+                "Kategori": [category]
+            })
+            
+            # Tampilkan tabel polutan tertinggi
+            st.write(highest_pollutant_data)
 
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
