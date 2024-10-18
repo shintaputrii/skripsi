@@ -910,7 +910,7 @@ with st.container():
             prediction = fuzzy_knn_predict(data, "ozon", user_input, k=3)
             st.write(f"Prediksi konsentrasi Ozon esok hari: {prediction:.2f}")
 
-        st.subheader(NO2)
+        st.subheader("NO2")
         # Fungsi untuk normalisasi data
         def normalize_data(data):
             scaler = MinMaxScaler()
