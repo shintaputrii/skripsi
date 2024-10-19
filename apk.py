@@ -499,6 +499,77 @@ with st.container():
             mape = fuzzy_knn_predict_sulfur(data, k=3, test_size=test_size)
             mapes_sulfur.append(mape)
 
+        # Modeling Ozon
+        st.subheader("Modelling Ozon")
+        
+        # Fungsi untuk normalisasi data
+        def normalize_data(data):
+            scaler = MinMaxScaler()
+            normalized_data = scaler.fit_transform(data)
+            return normalized_data, scaler
+        
+        # Fungsi untuk menghitung keanggotaan fuzzy (inverse distance)
+        def calculate_membership_inverse(distances, epsilon=1e-10):
+            memberships = 1 / (distances + epsilon)
+            return memberships
+        
+        # Fungsi Fuzzy KNN untuk Ozon
+        def fuzzy_knn_predict_ozon(data, k=3, test_size=0.3):
+            # Normalisasi data Ozon
+            imports = data['ozon'].values.reshape(-1, 1)
+            data['ozon_normalized'], scaler = normalize_data(imports)
+        
+            # Ekstrak fitur dan target
+            X = data['ozon_normalized'].values[:-1].reshape(-1, 1)
+            y = data['ozon_normalized'].values[1:]
+        
+            # Bagi data menjadi train dan test sesuai rasio yang diberikan
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, shuffle=False)
+        
+            # Menyimpan tanggal untuk test set
+            dates_test = data['tanggal'].values[-len(y_test):]
+        
+            # Inisialisasi model KNN
+            knn = KNeighborsRegressor(n_neighbors=k, weights='distance')
+            knn.fit(X_train, y_train)
+        
+            # Mendapatkan tetangga dan jaraknya
+            distances, indices = knn.kneighbors(X_test, n_neighbors=k, return_distance=True)
+        
+            # Inisialisasi array untuk menyimpan prediksi
+            y_pred = np.zeros(len(X_test))
+        
+            # Loop untuk menghitung prediksi berdasarkan membership
+            for i in range(len(X_test)):
+                neighbor_distances = distances[i]
+                neighbor_indices = indices[i]
+                neighbor_targets = y_train[neighbor_indices]
+                memberships = calculate_membership_inverse(neighbor_distances)
+                y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
+        
+            # Mengembalikan nilai prediksi dan nilai aktual ke skala awal
+            y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))
+            y_test_original = scaler.inverse_transform(y_test.reshape(-1, 1))
+        
+            # Menghitung MAPE
+            mape = np.mean(np.abs((y_test_original - y_pred_original) / y_test_original)) * 100
+        
+            # Menampilkan hasil prediksi dan nilai aktual
+            results = pd.DataFrame({'Tanggal': dates_test, 'Actual': y_test_original.flatten(), 'Predicted': y_pred_original.flatten()})
+            st.write(f'MAPE untuk pembagian data {int((1-test_size)*100)}% - {int(test_size*100)}%: {mape:.2f}%')
+            st.write("Hasil Prediksi:")
+            st.write(results)
+        
+            return mape
+        
+        # Menyimpan MAPE untuk setiap rasio Ozon
+        mapes_ozon = []
+        test_sizes = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
+        
+        for test_size in test_sizes:
+            mape = fuzzy_knn_predict_ozon(data, k=3, test_size=test_size)
+            mapes_ozon.append(mape)
+    
     elif selected == "Next Day":   
         st.subheader("PM10")       
         # Fungsi untuk normalisasi data
