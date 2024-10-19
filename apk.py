@@ -1285,6 +1285,21 @@ with st.container():
         
             # Menampilkan grafik di Streamlit
             st.plotly_chart(fig)
+        
+            # Buat grafik keriting
+            plt.figure(figsize=(10, 6))
+            plt.plot(predictions.keys(), predictions.values(), marker='x', label='Hasil Prediksi', color='blue')
+            
+            # Tambahkan input pengguna ke grafik
+            plt.plot(predictions.keys(), user_inputs.values(), marker='x', label='Input Pengguna', color='red')
+            
+            plt.title('Grafik Prediksi Kualitas Udara')
+            plt.xlabel('Polutan')
+            plt.ylabel('Konsentrasi (µg/m³)')
+            plt.legend()
+            plt.grid()
+            st.pyplot(plt)
+
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
     st.write("Shinta Alya Imani Putri-200411100005 (Teknik Informatika)")
