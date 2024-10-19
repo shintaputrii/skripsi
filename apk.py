@@ -120,7 +120,7 @@ with st.container():
         # Menampilkan dataframe setelah penghapusan kolom
         st.dataframe(data, width=600)
         
-    elif selected == "Missing Value":
+    elif selected == "Missing Value & Normalisasi":
         # MEAN IMPUTATION
         st.subheader("""Mean Imputation""")
         # Membaca dataset dari file Excel
