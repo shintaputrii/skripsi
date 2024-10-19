@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_absolute_percentage_error
 from math import sqrt
+import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 
 
@@ -1255,6 +1256,35 @@ with st.container():
             # Tampilkan tabel polutan tertinggi
             st.write(highest_pollutant_data)
 
+            # Membuat grafik untuk input dan hasil prediksi
+            fig = go.Figure()
+        
+            # Menambahkan trace untuk input
+            fig.add_trace(go.Bar(
+                x=pollutants,
+                y=list(user_inputs.values()),
+                name='Input',
+                marker_color='blue'
+            ))
+        
+            # Menambahkan trace untuk prediksi
+            fig.add_trace(go.Bar(
+                x=pollutants,
+                y=list(predictions.values()),
+                name='Prediksi',
+                marker_color='orange'
+            ))
+        
+            # Menambahkan layout
+            fig.update_layout(
+                title='Input dan Hasil Prediksi Kualitas Udara',
+                xaxis_title='Polutan',
+                yaxis_title='Konsentrasi',
+                barmode='group'
+            )
+        
+            # Menampilkan grafik di Streamlit
+            st.plotly_chart(fig)
     # Menampilkan penanda
     st.markdown("---")  # Menambahkan garis pemisah
     st.write("Shinta Alya Imani Putri-200411100005 (Teknik Informatika)")
