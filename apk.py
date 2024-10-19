@@ -1147,11 +1147,11 @@ with st.container():
         }
         
         # Convert to DataFrame
-        max_values_df = pd.DataFrame(max_values)
+        max_values_data = pd.DataFrame(max_values)
         
         # Display the table
         st.subheader("Nilai Maksimum Per Polutan")
-        st.table(max_values_df)
+        st.table(max_values_data)
 
         st.subheader("Prediksi Kualitas Udara")
         # Fungsi untuk normalisasi data
