@@ -1132,6 +1132,24 @@ with st.container():
         if st.button("Prediksi NO2"):
             prediction = fuzzy_knn_predict(data, "nitrogen_dioksida", user_input, k=3)
             st.write(f"Prediksi konsentrasi Nitrogen Dioksida esok hari: {prediction:.2f}")
+        # Menampilkan nilai maksimum dari data asli per polutan
+        max_pm10 = data['pm_sepuluh'].max()
+        st.write(f"Nilai maksimum PM10: {max_pm10}")
+        
+        max_pm25 = data['pm_duakomalima'].max()
+        st.write(f"Nilai maksimum PM2.5: {max_pm25}")
+        
+        max_so2 = data['sulfur_dioksida'].max()
+        st.write(f"Nilai maksimum SO2: {max_so2}")
+        
+        max_co = data['karbon_monoksida'].max()
+        st.write(f"Nilai maksimum CO: {max_co}")
+        
+        max_o3 = data['ozon'].max()
+        st.write(f"Nilai maksimum O3: {max_o3}")
+        
+        max_no2 = data['nitrogen_dioksida'].max()
+        st.write(f"Nilai maksimum NO2: {max_no2}")
 
         st.subheader("Prediksi Kualitas Udara")
         # Fungsi untuk normalisasi data
