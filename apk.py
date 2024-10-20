@@ -436,7 +436,16 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict_pm25(data, k=3, test_size=test_size)
             mapes_pm25.append(mape)
-            
+        # Plotting MAPE
+        plt.figure(figsize=(8, 5))
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.xlabel('Rasio Pembagian Data')
+        plt.ylabel('MAPE (%)')
+        plt.ylim(0, max(mapes) + 10)
+        plt.grid(axis='y')
+        st.pyplot(plt)   
+        
         # Modeling Sulfur Dioksida
         st.subheader("Modelling Sulfur Dioksida")
         
@@ -508,6 +517,16 @@ with st.container():
             mape = fuzzy_knn_predict_sulfur(data, k=3, test_size=test_size)
             mapes_sulfur.append(mape)
 
+        # Plotting MAPE
+        plt.figure(figsize=(8, 5))
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.xlabel('Rasio Pembagian Data')
+        plt.ylabel('MAPE (%)')
+        plt.ylim(0, max(mapes) + 10)
+        plt.grid(axis='y')
+        st.pyplot(plt)
+        
         # Modeling Karbon Monoksida
         st.subheader("Modelling Karbon Monoksida")
         
@@ -578,7 +597,16 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict_co(data, k=3, test_size=test_size)
             mapes_co.append(mape)
-
+        # Plotting MAPE
+        plt.figure(figsize=(8, 5))
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.xlabel('Rasio Pembagian Data')
+        plt.ylabel('MAPE (%)')
+        plt.ylim(0, max(mapes) + 10)
+        plt.grid(axis='y')
+        st.pyplot(plt)
+        
         # Modeling Ozon
         st.subheader("Modelling Ozon")
         
@@ -649,7 +677,16 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict_ozon(data, k=3, test_size=test_size)
             mapes_ozon.append(mape)
-
+        # Plotting MAPE
+        plt.figure(figsize=(8, 5))
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.xlabel('Rasio Pembagian Data')
+        plt.ylabel('MAPE (%)')
+        plt.ylim(0, max(mapes) + 10)
+        plt.grid(axis='y')
+        st.pyplot(plt)
+        
         # Modeling Nitrogen Dioksida
         st.subheader("Modelling Nitrogen Dioksida")
         
@@ -720,7 +757,16 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict_nitrogen(data, k=6, test_size=test_size)
             mapes_nitrogen.append(mape)
-    
+        # Plotting MAPE
+        plt.figure(figsize=(8, 5))
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.xlabel('Rasio Pembagian Data')
+        plt.ylabel('MAPE (%)')
+        plt.ylim(0, max(mapes) + 10)
+        plt.grid(axis='y')
+        st.pyplot(plt)   
+        
     elif selected == "Next Day":   
         st.subheader("PM10")       
         # Fungsi untuk normalisasi data
