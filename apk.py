@@ -365,22 +365,6 @@ with st.container():
         plt.ylim(0, max(mapes) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)
-        
-        # Menambahkan grafik keriting untuk rasio 90:10
-        if test_sizes[2] == 0.1:  # Pastikan kita mengambil hasil dari rasio 90:10
-            plt.figure(figsize=(12, 6))
-            plt.plot(dates_test, y_test_original, label='Nilai Aktual', color='blue', marker='o')
-            plt.plot(dates_test, y_pred_original, label='Hasil Prediksi', color='orange', linestyle='--', marker='x')
-            plt.title('Grafik Hasil Prediksi vs Nilai Aktual (90:10)')
-            plt.xlabel('Tanggal')
-            plt.ylabel('Nilai PM10')
-            plt.xticks(rotation=45)
-            plt.legend()
-            plt.grid()
-            plt.tight_layout()
-        
-            # Tampilkan grafik di Streamlit
-            st.pyplot(plt)
     
         # Modeling PM2.5
         st.subheader("Modelling PM2.5")
