@@ -378,28 +378,6 @@ with st.container():
         plt.grid(axis='y')
         plt.show()
 
-        # Daftar untuk menyimpan MAPE
-        mape_values = []
-        
-        # Daftar untuk menyimpan rasio pembagian
-        ratios = [(0.3, '70:30'), (0.2, '80:20'), (0.1, '90:10')]
-        
-        # Loop melalui rasio pembagian
-        for test_size, label in ratios:
-            mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
-            mape_values.append(mape)
-        
-        # Membuat plot MAPE
-        plt.figure(figsize=(10, 5))
-        plt.bar(ratios, mape_values, color='skyblue')
-        plt.xlabel('Rasio Pembagian Data')
-        plt.ylabel('MAPE (%)')
-        plt.title('Perbandingan MAPE untuk Rasio Pembagian Data')
-        plt.xticks(rotation=45)
-        plt.ylim(0, max(mape_values) + 5)  # Memberi sedikit ruang di atas
-        plt.grid(axis='y', linestyle='--', alpha=0.7)
-        plt.show()
-
         # Modeling PM2.5
         st.subheader("Modelling PM2.5")
 
