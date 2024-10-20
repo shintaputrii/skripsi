@@ -590,7 +590,7 @@ with st.container():
             st.write("Hasil Prediksi:")
             st.write(results)
 
-        return mape
+            return mape
     
         # Menyimpan MAPE untuk setiap rasio Karbon Monoksida
         mapes_co = []
