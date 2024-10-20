@@ -356,18 +356,6 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
             mapes.append(mape)
-        
-        # Daftar untuk menyimpan MAPE
-        mapes = []
-        
-        # Rasio pembagian data
-        ratios = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
-        
-        # Loop melalui rasio pembagian
-        for test_size in ratios:
-            mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
-            mapes.append(mape)
-        
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
         plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
