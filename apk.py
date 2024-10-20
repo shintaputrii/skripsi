@@ -367,7 +367,7 @@ with st.container():
         plt.legend()
         plt.grid()
         plt.tight_layout()
-        plt.show()
+        st.pyplot()
         
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
