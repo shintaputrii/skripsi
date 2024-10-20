@@ -365,6 +365,11 @@ with st.container():
         plt.ylim(0, max(mapes) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)
+        
+        # Ambil data prediksi dan nilai aktual
+        dates_test = data['tanggal'].values[-len(y_test):]  # Tanggal untuk data test
+        y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))  # Prediksi
+        y_test_original = scaler.inverse_transform(y_test.reshape(-1, 1))  # Nilai aktual
         # Buat grafik keriting
         plt.figure(figsize=(12, 6))
         plt.plot(dates_test, y_test_original, label='Nilai Aktual', color='blue', marker='o')
