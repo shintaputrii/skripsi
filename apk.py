@@ -349,7 +349,6 @@ with st.container():
             st.write(results)
         
             return mape
-        
         # Menyimpan MAPE untuk setiap rasio
         mapes = []
         test_sizes = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
@@ -357,6 +356,28 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
             mapes.append(mape)
+        
+        # Daftar untuk menyimpan MAPE
+        mape_values = []
+        
+        # Daftar untuk menyimpan rasio pembagian
+        ratios = [(0.3, '70:30'), (0.2, '80:20'), (0.1, '90:10')]
+        
+        # Loop melalui rasio pembagian
+        for test_size, label in ratios:
+            mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
+            mape_values.append(mape)
+        
+        # Membuat plot MAPE
+        plt.figure(figsize=(10, 5))
+        plt.bar(ratios, mape_values, color='skyblue')
+        plt.xlabel('Rasio Pembagian Data')
+        plt.ylabel('MAPE (%)')
+        plt.title('Perbandingan MAPE untuk Rasio Pembagian Data')
+        plt.xticks(rotation=45)
+        plt.ylim(0, max(mape_values) + 5)  # Memberi sedikit ruang di atas
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.show()
 
         # Modeling PM2.5
         st.subheader("Modelling PM2.5")
@@ -712,34 +733,6 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict_nitrogen(data, k=6, test_size=test_size)
             mapes_nitrogen.append(mape)
-
-        # Asumsikan mapes sudah terisi sebelumnya dengan MAPE dari setiap model
-        # Contoh: mapes = [mape_pm10, mape_pm25, mape_sulfur, mape_co, mape_ozon, mape_nitrogen]
-        
-        # Menyusun data untuk plotting
-        pollutants = ['PM10', 'PM2.5', 'Sulfur Dioksida', 'Karbon Monoksida', 'Ozon', 'Nitrogen Dioksida']
-        mape_values = [mapes[i] for i in range(len(mapes))]  # MAPE dari setiap model
-        
-        # Membuat bar plot
-        x = np.arange(len(pollutants))  # posisi x untuk setiap bar
-        width = 0.25  # lebar bar
-        
-        fig, ax = plt.subplots()
-        bars_70_30 = ax.bar(x - width, mapes[0:3], width, label='70%-30%')
-        bars_80_20 = ax.bar(x, mapes[3:6], width, label='80%-20%')
-        bars_90_10 = ax.bar(x + width, mapes[6:9], width, label='90%-10%')
-        
-        # Menambahkan label dan judul
-        ax.set_xlabel('Pollutants')
-        ax.set_ylabel('MAPE (%)')
-        ax.set_title('MAPE for Different Pollution Models')
-        ax.set_xticks(x)
-        ax.set_xticklabels(pollutants)
-        ax.legend()
-        
-        # Menampilkan plot
-        plt.show()
-
     
     elif selected == "Next Day":   
         st.subheader("PM10")       
