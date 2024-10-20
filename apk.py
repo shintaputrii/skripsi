@@ -521,7 +521,7 @@ with st.container():
 
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
-        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes_sulfur, color=['blue', 'orange', 'green'])
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
@@ -601,7 +601,7 @@ with st.container():
             mapes_co.append(mape)
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
-        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes_co, color=['blue', 'orange', 'green'])
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
@@ -681,7 +681,7 @@ with st.container():
             mapes_ozon.append(mape)
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
-        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes_ozon, color=['blue', 'orange', 'green'])
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
@@ -761,7 +761,7 @@ with st.container():
             mapes_nitrogen.append(mape)
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
-        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes_nitrogen, color=['blue', 'orange', 'green'])
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
