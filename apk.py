@@ -364,8 +364,8 @@ with st.container():
         plt.ylabel('MAPE (%)')
         plt.ylim(0, max(mapes) + 10)
         plt.grid(axis='y')
-        plt.show()
-
+        st.pyplot(plt)
+        
         # Modeling PM2.5
         st.subheader("Modelling PM2.5")
 
