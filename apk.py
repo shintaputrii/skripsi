@@ -596,7 +596,7 @@ with st.container():
         mapes_co = []
         test_sizes = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
         for test_size in test_sizes:
-            mape = fuzzy_knn_predict(data, k=6, sigma=1.0, test_size=test_size)
+            mape = fuzzy_knn_predict_co(data, k=6, sigma=1.0, test_size=test_size)
             mapes_co.append(mape)
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
