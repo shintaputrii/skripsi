@@ -368,8 +368,7 @@ with st.container():
         plt.grid()
         plt.tight_layout()
         plt.show()
-    
-        return mape
+        
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
         plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
