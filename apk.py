@@ -586,7 +586,7 @@ with st.container():
         
             # Menampilkan hasil prediksi dan nilai aktual
             results = pd.DataFrame({'Tanggal': dates_test, 'Actual': y_test_original.flatten(), 'Predicted': y_pred_original.flatten()})
-            st.write(f'MAPE untuk test size {int((1-test_size)*100)}%: {mape:.2f}%')
+            st.write(f'MAPE untuk Pembagian Data {int((1-test_size)*100)}%: {mape:.2f}%')
             st.write("Hasil Prediksi:")
             st.write(results)
 
