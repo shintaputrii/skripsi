@@ -442,7 +442,7 @@ with st.container():
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
-        plt.ylim(0, max(mapes) + 10)
+        plt.ylim(0, max(mapes_pm25) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)   
         
@@ -523,7 +523,7 @@ with st.container():
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
-        plt.ylim(0, max(mapes) + 10)
+        plt.ylim(0, max(mapes_sulfur) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)
         
@@ -603,7 +603,7 @@ with st.container():
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
-        plt.ylim(0, max(mapes) + 10)
+        plt.ylim(0, max(mapes_co) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)
         
@@ -683,7 +683,7 @@ with st.container():
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
-        plt.ylim(0, max(mapes) + 10)
+        plt.ylim(0, max(mapes_ozon) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)
         
@@ -763,7 +763,7 @@ with st.container():
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
-        plt.ylim(0, max(mapes) + 10)
+        plt.ylim(0, max(mapes_nitrogen) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)   
         
