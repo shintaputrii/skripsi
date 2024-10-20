@@ -543,15 +543,15 @@ with st.container():
             memberships = 1 / (distances + epsilon)
             return memberships
         
-        # Fungsi Fuzzy KNN untuk Karbon Monoksida
-        def fuzzy_knn_predict_co(data, k=3, test_size=0.3):
-            # Normalisasi data Karbon Monoksida
+        # Fungsi Fuzzy KNN
+        def fuzzy_knn_predict(data, k=3, sigma=1.0, test_size=0.3):
+            # Normalisasi data
             imports = data['karbon_monoksida'].values.reshape(-1, 1)
-            data['co_normalized'], scaler = normalize_data(imports)
+            data['karbon_monoksida_normalized'], scaler = normalize_data(imports)
         
             # Ekstrak fitur dan target
-            X = data['co_normalized'].values[:-1].reshape(-1, 1)
-            y = data['co_normalized'].values[1:]
+            X = data['karbon_monoksida_normalized'].values[:-1].reshape(-1, 1)
+            y = data['karbon_monoksida_normalized'].values[1:]
         
             # Bagi data menjadi train dan test sesuai rasio yang diberikan
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, shuffle=False)
@@ -586,12 +586,12 @@ with st.container():
         
             # Menampilkan hasil prediksi dan nilai aktual
             results = pd.DataFrame({'Tanggal': dates_test, 'Actual': y_test_original.flatten(), 'Predicted': y_pred_original.flatten()})
-            st.write(f'MAPE untuk pembagian data {int((1-test_size)*100)}% - {int(test_size*100)}%: {mape:.2f}%')
+            st.write(f'MAPE untuk test size {int((1-test_size)*100)}%: {mape:.2f}%')
             st.write("Hasil Prediksi:")
             st.write(results)
-        
-            return mape
-        
+
+        return mape
+    
         # Menyimpan MAPE untuk setiap rasio Karbon Monoksida
         mapes_co = []
         test_sizes = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
