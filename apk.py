@@ -693,8 +693,9 @@ with st.container():
         st.subheader("Modelling Nitrogen Dioksida")
         
         # Fungsi untuk normalisasi data
+        # Fungsi untuk normalisasi data menggunakan Z-Score (StandardScaler)
         def normalize_data(data):
-            scaler = MinMaxScaler()
+            scaler = StandardScaler()
             normalized_data = scaler.fit_transform(data)
             return normalized_data, scaler
         
