@@ -688,7 +688,7 @@ with st.container():
         plt.ylim(0, max(mapes_ozon) + 10)
         plt.grid(axis='y')
         st.pyplot(plt)
-        
+
         # Modeling Nitrogen Dioksida
         st.subheader("Modelling Nitrogen Dioksida")
         
@@ -698,13 +698,13 @@ with st.container():
             normalized_data = scaler.fit_transform(data)
             return normalized_data, scaler
         
-        # Fungsi untuk menghitung keanggotaan fuzzy (inverse distance)
-        def calculate_membership_inverse(distances, epsilon=1e-10):
-            memberships = 1 / (distances + epsilon)
+        # Fungsi untuk menghitung keanggotaan fuzzy dengan sigma
+        def calculate_membership_inverse(distances, sigma=1.0):
+            memberships = np.exp(- (distances ** 2) / (2 * sigma ** 2))
             return memberships
         
         # Fungsi Fuzzy KNN untuk Nitrogen Dioksida
-        def fuzzy_knn_predict_nitrogen(data, k=3, test_size=0.3):
+        def fuzzy_knn_predict_nitrogen(data, k=6, test_size=0.3, sigma=1.0):
             # Normalisasi data Nitrogen Dioksida
             imports = data['nitrogen_dioksida'].values.reshape(-1, 1)
             data['nitrogen_dioksida_normalized'], scaler = normalize_data(imports)
@@ -734,7 +734,7 @@ with st.container():
                 neighbor_distances = distances[i]
                 neighbor_indices = indices[i]
                 neighbor_targets = y_train[neighbor_indices]
-                memberships = calculate_membership_inverse(neighbor_distances)
+                memberships = calculate_membership_inverse(neighbor_distances, sigma)
                 y_pred[i] = np.sum(memberships * neighbor_targets) / np.sum(memberships)
         
             # Mengembalikan nilai prediksi dan nilai aktual ke skala awal
@@ -757,17 +757,19 @@ with st.container():
         test_sizes = [0.3, 0.2, 0.1]  # 70%-30%, 80%-20%, 90%-10%
         
         for test_size in test_sizes:
-            mape = fuzzy_knn_predict_nitrogen(data, k=6, test_size=test_size)
+            mape = fuzzy_knn_predict_nitrogen(data, k=6, test_size=test_size, sigma=1.0)
             mapes_nitrogen.append(mape)
+        
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
         plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes_nitrogen, color=['blue', 'orange', 'green'])
-        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.title('MAPE untuk Berbagai Pembagian Data Nitrogen Dioksida')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
         plt.ylim(0, max(mapes_nitrogen) + 10)
         plt.grid(axis='y')
-        st.pyplot(plt)   
+        st.pyplot(plt)
+         
         
     elif selected == "Next Day":   
         st.subheader("PM10")       
