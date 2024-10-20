@@ -356,6 +356,20 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
             mapes.append(mape)
+        # Plotting data aktual dan prediksi
+        plt.figure(figsize=(12, 6))
+        plt.plot(results['Tanggal'], results['Actual'], label='Aktual', color='blue', marker='o')
+        plt.plot(results['Tanggal'], results['Predicted'], label='Prediksi', color='red', marker='x')
+        plt.title('Plot Aktual vs Prediksi PM10')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Konsentrasi PM10')
+        plt.xticks(rotation=45)
+        plt.legend()
+        plt.grid()
+        plt.tight_layout()
+        plt.show()
+    
+        return mape
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
         plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
