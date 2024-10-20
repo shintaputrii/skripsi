@@ -438,13 +438,15 @@ with st.container():
             mapes_pm25.append(mape)
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
-        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
-        plt.title('MAPE untuk Berbagai Pembagian Data')
+        plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes_pm25, color=['blue', 'orange', 'green'])
+        plt.title('MAPE untuk Berbagai Pembagian Data PM2.5')
         plt.xlabel('Rasio Pembagian Data')
         plt.ylabel('MAPE (%)')
         plt.ylim(0, max(mapes_pm25) + 10)
         plt.grid(axis='y')
-        st.pyplot(plt)   
+        
+        # Menggunakan Streamlit untuk menampilkan plot
+        st.pyplot(plt)
         
         # Modeling Sulfur Dioksida
         st.subheader("Modelling Sulfur Dioksida")
