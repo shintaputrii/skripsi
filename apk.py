@@ -349,15 +349,15 @@ with st.container():
             st.write(results)
             # Plotting hasil prediksi vs aktual
             plt.figure(figsize=(12, 6))
-            plt.plot(dates_test, y_test_original, label='Actual', color='blue', marker='o')
-            plt.plot(dates_test, y_pred_original, label='Predicted', color='orange', marker='x')
+            plt.plot(dates_test, y_test_original, label='Actual', color='blue', linestyle='-', linewidth=2)
+            plt.plot(dates_test, y_pred_original, label='Predicted', color='orange', linestyle='-', linewidth=2)
             plt.title('Hasil Prediksi PM10')
             plt.xlabel('Tanggal')
             plt.ylabel('PM10')
             plt.xticks(rotation=45)
             plt.legend()
             plt.grid()
-            st.pyplot(plt)    
+            st.pyplot(plt) 
             return mape
         # Menyimpan MAPE untuk setiap rasio
         mapes = []
