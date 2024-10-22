@@ -349,7 +349,7 @@ with st.container():
             st.write("Hasil Prediksi:")
             st.write(results)
             # Plotting hasil prediksi vs aktual
-            plt.figure(figsize=(14, 6))
+            plt.figure(figsize=(25, 5))
             plt.plot(dates_test, y_test_original, label='Actual', color='blue', linestyle='-', linewidth=2)
             plt.plot(dates_test, y_pred_original, label='Predicted', color='orange', linestyle='-', linewidth=2)
             plt.title('Hasil Prediksi PM10')
@@ -375,7 +375,7 @@ with st.container():
             mapes.append(mape)
         
         # Plotting MAPE
-        plt.figure(figsize=(25, 5))
+        plt.figure(figsize=(8, 5))
         plt.bar(['70%-30%', '80%-20%', '90%-10%'], mapes, color=['blue', 'orange', 'green'])
         plt.title('MAPE untuk Berbagai Pembagian Data')
         plt.xlabel('Rasio Pembagian Data')
