@@ -356,18 +356,24 @@ with st.container():
         for test_size in test_sizes:
             mape = fuzzy_knn_predict(data, k=3, test_size=test_size)
             mapes.append(mape)
-        # Plotting data aktual dan prediksi
-        plt.figure(figsize=(12, 6))
-        plt.plot(results['Tanggal'], results['Actual'], label='Aktual', color='blue', marker='o')
-        plt.plot(results['Tanggal'], results['Predicted'], label='Prediksi', color='red', marker='x')
-        plt.title('Plot Aktual vs Prediksi PM10')
-        plt.xlabel('Tanggal')
-        plt.ylabel('Konsentrasi PM10')
-        plt.xticks(rotation=45)
-        plt.legend()
-        plt.grid()
-        plt.tight_layout()
-        st.pyplot()
+            
+        # Tambahkan ini setelah hasil prediksi ditampilkan
+        def plot_results(results):
+            plt.figure(figsize=(12, 6))
+            plt.plot(results['Tanggal'], results['Actual'], label='Aktual', color='blue', marker='o')
+            plt.plot(results['Tanggal'], results['Predicted'], label='Prediksi', color='orange', marker='x')
+            plt.title('Hasil Prediksi PM10')
+            plt.xlabel('Tanggal')
+            plt.ylabel('PM10')
+            plt.legend()
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            
+            # Menampilkan grafik di Streamlit
+            st.pyplot(plt)
+        
+        # Memanggil fungsi plot_results setelah hasil prediksi
+        plot_results(results)
         
         # Plotting MAPE
         plt.figure(figsize=(8, 5))
