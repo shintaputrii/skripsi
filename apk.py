@@ -349,7 +349,7 @@ with st.container():
             st.write("Hasil Prediksi:")
             st.write(results)
             # Plotting nilai aktual dan prediksi
-            fig, ax = plt.subplots(figsize=(6, 5))
+            fig, ax = plt.subplots(figsize=(5, 3))
             ax.plot(results['Actual'], label='Nilai Aktual', color='blue', linewidth=2)
             ax.plot(results['Predicted'], label='Nilai Prediksi', color='orange', linewidth=2)
             ax.set_title('Perbandingan Nilai Aktual dan Prediksi')
