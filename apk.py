@@ -348,23 +348,16 @@ with st.container():
             st.write(f'MAPE untuk pembagian data {int((1-test_size)*100)}% - {int(test_size*100)}%: {mape:.2f}%')
             st.write("Hasil Prediksi:")
             st.write(results)
-            # Plotting hasil prediksi vs aktual
-            plt.figure(figsize=(25, 5))
-            plt.plot(dates_test, y_test_original, label='Actual', color='blue', linestyle='-', linewidth=2)
-            plt.plot(dates_test, y_pred_original, label='Predicted', color='orange', linestyle='-', linewidth=2)
-            plt.title('Hasil Prediksi PM10')
-            plt.xlabel('Tanggal')
-            plt.ylabel('PM10')
-            
-            # Mengatur format tanggal di sumbu X
-            plt.xticks(rotation=45)
-            ax = plt.gca()
-            ax.xaxis.set_major_locator(mdates.DayLocator())
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-            
-            plt.legend()
-            plt.grid()
-            st.pyplot(plt) 
+            # Plotting nilai aktual dan prediksi
+            fig, ax = plt.subplots(figsize=(8, 5))
+            ax.plot(results['Actual'], label='Nilai Aktual', color='blue', linewidth=2)
+            ax.plot(results['Predicted'], label='Nilai Prediksi', color='orange', linewidth=2)
+            ax.set_title('Perbandingan Nilai Aktual dan Prediksi')
+            ax.set_xlabel('Indeks')
+            ax.set_ylabel('Nilai PM10')
+            ax.legend()
+            ax.grid()
+            st.pyplot(fig)
             return mape
         # Menyimpan MAPE untuk setiap rasio
         mapes = []
