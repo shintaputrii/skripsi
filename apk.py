@@ -348,7 +348,7 @@ with st.container():
             st.write("Hasil Prediksi:")
             st.write(results)
             # Plotting hasil prediksi vs aktual
-            plt.figure(figsize=(4, 10))
+            plt.figure(figsize=(4, 6))
             plt.plot(dates_test, y_test_original, label='Actual', color='blue', linestyle='-', linewidth=2)
             plt.plot(dates_test, y_pred_original, label='Predicted', color='orange', linestyle='-', linewidth=2)
             plt.title('Hasil Prediksi PM10')
